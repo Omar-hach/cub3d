@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sbellafr/cub3d/MLX42/cmake-3.18.0/Tests/RunCMake/pseudo_iwyu.c
+stdio.h
+-
+

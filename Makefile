@@ -1,46 +1,25 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/06/19 18:27:21 by ohachami          #+#    #+#              #
-#    Updated: 2023/06/19 18:28:10 by ohachami         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME = cub3d
 
-NAME = cub3D
+CFLAGS =   MLX42/build/libmlx42.a -Iinclude -ldl -lglfw -pthread -lm  -Wunreachable-code -Ofast 
 
-CC = gcc
+PARSING = ./parsing/cub3d.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
-HEADER = cub3d.h
 
-CFLAGS = -Werror -Wall -Wextra 
+SRCS = $(PARSING) 
 
-FLAGS = #-lreadline -lcurses 
+OBJS = $(SRCS:.c=.o)
 
-SRC = 	cub3d.c 
+all: $(NAME)
 
-OBJ = $(SRC:.c=.o)
-
-LIBFT = libft/libft.a
-
-all:$(NAME)
-
-$(NAME): $(OBJ) $(HEADER)
-	make -C libft
-	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+$(NAME): 
+	gcc parsing/*.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c MLX42/build/libmlx42.a -Iinclude -ldl -lglfw -pthread -lm  -Wunreachable-code -Ofast
 
 clean:
-	make -C libft clean
-	rm -f *.o libft/*.o get_next_line/*.o print/*.o
+	rm -f $(OBJS)
 
 fclean: clean
-	make -C libft fclean
 	rm -f $(NAME)
 
 re: fclean all
-	make -C libft re
 
-.PHONY: all clean fclean re
+.PHONY: clean fclean all re

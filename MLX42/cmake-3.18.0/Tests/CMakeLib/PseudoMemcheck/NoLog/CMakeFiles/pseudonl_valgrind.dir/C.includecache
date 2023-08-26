@@ -1,0 +1,10 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sbellafr/cub3d/MLX42/cmake-3.18.0/Tests/CMakeLib/PseudoMemcheck/NoLog/ret0.c
+
