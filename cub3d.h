@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/08/21 02:57:01 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/08/28 11:54:14 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
 #include<unistd.h>
 #include"get_next_line/get_next_line.h"
 #include <fcntl.h>
