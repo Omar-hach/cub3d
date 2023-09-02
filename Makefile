@@ -1,25 +1,48 @@
-NAME = cub3d
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
+#    Updated: 2023/09/02 22:56:05 by ohachami         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CFLAGS =   MLX42/build/libmlx42.a -Iinclude -ldl -lglfw -pthread -lm  -Wunreachable-code -Ofast 
+NAME = cub3D
 
-PARSING = ./parsing/cub3d.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+CC = gcc
 
+HEADER = cub3d.h
 
-SRCS = $(PARSING) 
+CFLAGS = -Werror -Wall -Wextra 
 
-OBJS = $(SRCS:.c=.o)
+GLFW = $(shell brew --prefix glfw)
 
-all: $(NAME)
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
 
-$(NAME): 
-	gcc parsing/*.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c MLX42/build/libmlx42.a -Iinclude -ldl -lglfw -pthread -lm  -Wunreachable-code -Ofast
+SRC = parsing/cub3d.c 
+
+OBJ = $(SRC:.c=.o)
+
+LIBFT = libft/libft.a MLX42/libmlx42.a -I$() -lglfw
+
+all:$(NAME)
+
+$(NAME): $(OBJ) $(HEADER)
+	make -C libft
+	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 clean:
-	rm -f $(OBJS)
+	make -C libft clean
+	rm -f *.o libft/*.o
 
 fclean: clean
+	make -C libft fclean
 	rm -f $(NAME)
 
 re: fclean all
+	make -C libft re
 
-.PHONY: clean fclean all re
+.PHONY: all clean fclean re

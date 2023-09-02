@@ -26,6 +26,6 @@ void	*ft_calloc2(size_t count, size_t size);
 char	*get_next_line(int fd);
 char	*ft_strjoin2(char *s1, char *s2);
 int		ft_strlen2(const char *str);
-int		ft_strchr(const char *str, int c);
+int		ft_strchr2(const char *str, int c);
 
 #endif

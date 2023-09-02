@@ -25,6 +25,8 @@ SRC = print/ft_strlen.c\
 	print/ft_putchar.c\
 	print/ft_printf.c\
 	print/ft_address.c\
+	get_next_line/get_next_line_utils_bonus.c\
+	get_next_line/get_next_line_bonus.c\
 	ft_atoi.c\
 	ft_bzero.c\
 	ft_calloc.c\

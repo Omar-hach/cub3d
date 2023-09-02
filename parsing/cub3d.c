@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 // #include "MLX42/MLX42.h"
 #define WIDTH 1000
 #define HEIGHT 1000
@@ -69,11 +66,11 @@ void	player_drawer(mlx_image_t *wall, int startx, int starty, int radius, int co
 
 
 // Exit the program as failure.
-static void ft_error(void)
+/*static void ft_error(void)
 {
 	fprintf(stderr, "%s", mlx_strerror(mlx_errno));
 	exit(EXIT_FAILURE);
-}
+}*/
 static void error(void)
 {
 	puts(mlx_strerror(mlx_errno));
@@ -122,8 +119,6 @@ void ft_start(char *str)
 	// Display the image
 	i = 0;
 	int j = 0;
-	int k = 0;
-	int l = 0;
 	int playerx = 0;
 	int playery = 0;
 	while (strs[i])
@@ -171,10 +166,6 @@ void ft_start(char *str)
 
 int main(int ac, char **av)
 {
-	
-
-	
-
 	if (ac == 2)
 		ft_start(av[1]);
 }

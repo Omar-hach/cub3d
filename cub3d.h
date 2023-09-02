@@ -14,13 +14,15 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<unistd.h>
-#include"get_next_line/get_next_line.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <unistd.h>
 #include <fcntl.h>
-#include "MLX42/include/MLX42/MLX42.h"
-// #include"minilibx-linux/mlx.h"
+# include "libft/libft.h"
+# include "libft/print/ft_printf.h"
+# include "libft/get_next_line/get_next_line_bonus.h"
+#include "MLX42/MLX42.h"
+
 void    ft_start_map(char *map);
 #endif
