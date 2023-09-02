@@ -37,6 +37,7 @@ $(NAME): $(OBJ) $(HEADER)
 clean:
 	make -C libft clean
 	rm -f *.o libft/*.o
+	rm -f *.o parsing/*.o
 
 fclean: clean
 	make -C libft fclean
