@@ -16,7 +16,7 @@ CC = gcc
 
 HEADER = cub3d.h
 
-CFLAGS = -Werror -Wall -Wextra 
+CFLAGS = -Werror -Wall -Wextra #-fsanitize=address
 
 GLFW = $(shell brew --prefix glfw)
 
