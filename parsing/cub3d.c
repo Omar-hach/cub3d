@@ -67,27 +67,32 @@ void	cub_drawer(mlx_image_t *img, t_point start, t_point end, int color)
 		j = 0;
 		while (j < end.y - 1)
 		{
-			mlx_put_pixel(img, start.x + i, start.y + j, color);
+			mlx_put_pixel(img, start.x + j, start.y + i, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-t_point	player_drawer(mlx_image_t *img, t_point pos, int color)
+t_point	player_drawer(mlx_image_t *img, t_point pos, t_point player,  int color)
 {
 	int	r;
 	float deg;
 
-	r = 0;
+	r = -1;
 	deg = 0;
+	if(player.x != 0 || player.y != 0)
+		pos = player;
+	while(++r < 25)
+		mlx_put_pixel(img, pos.x + 25 ,pos.y + 25 + r, color);
+	r = 0;
 	while(r < 11)
 	{
 		deg = 0;
 		while (deg < M_PI * 2)
 		{
-			mlx_put_pixel(img, pos.x + r * cos(deg),
-				pos.y + r * sin(deg), color);
+			mlx_put_pixel(img, pos.x + 25 + r * cos(deg),
+				pos.y + 25 + r * sin(deg), color);
 			deg +=  M_PI / 180;
 		}
 		r++;
@@ -113,16 +118,36 @@ t_point	ft_draw_map(t_window *win, char **matrix, t_point player)
 		j = -1;
 		while (++j < 9)
 		{
-			start = assign_point(i * 50 + 10, j * 50 + 10, 0);
+			start = assign_point(j * 50 + 10, i * 50 + 10, 0);
 			if (matrix[i][j] == '1')
 				cub_drawer(win->img, start, end, 0x09005EFF);
 			else
 				cub_drawer(win->img, start, end, 0xB8A649FF);
-			if(matrix[i][j] == 'P')
-				player = player_drawer(win->img, start, 0xFF322BFF);
 		}
 	}
+	player = player_drawer(win->img, start, player, 0xFF322BFF);
 	return(player);
+}
+
+int check_inside(t_window *win, t_point *player)
+{
+	int i;
+	int j;
+
+	i = (player->x) / 50;
+	j = (player->y) / 50;
+	if(win->map.elem[j][i] == '1')
+	{
+		if(win->map.elem[j + 1][i] == '1')
+			player->x--;
+		if(win->map.elem[j][i + 1] == '1')
+			player->x--;
+		return(0);
+	}
+	else
+	{
+		return(1);
+	}
 }
 
 void	keyhook(void *param)
@@ -133,34 +158,33 @@ void	keyhook(void *param)
 	int			i;
 
 	mlx_delete_image(win->mlx_ptr, win->img);
-	win->img = mlx_new_image(win->mlx_ptr, win->map.wide * 50 + 20, HEIGHT);
-	printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_S))
+	//printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
+	win->img = mlx_new_image(win->mlx_ptr, HEIGHT, win->map.wide * 50 + 20);
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_S) && check_inside(win, &win->player.p))
 	{
-		win->player.p.x -= cos(win->player.angle * RAD);
-		win->player.p.y -= sin(win->player.angle * RAD);
+		win->player.p.x -= cos(win->player.angle * M_PI / 180);
+		win->player.p.y -= sin(win->player.angle * M_PI / 180);
 	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_W))
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_W) && check_inside(win, &win->player.p))
 	{
-		win->player.p.x += cos(win->player.angle * RAD);
-		win->player.p.y += sin(win->player.angle * RAD);
+		win->player.p.x += cos(win->player.angle * M_PI / 180);
+		win->player.p.y += sin(win->player.angle * M_PI / 180);
 	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_D))
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_D) && check_inside(win, &win->player.p))
 	{
-		win->player.p.x -= sin(win->player.angle * RAD);
-		win->player.p.y += cos(win->player.angle * RAD);
+		win->player.p.x -= sin(win->player.angle * M_PI / 180);
+		win->player.p.y += cos(win->player.angle * M_PI / 180);
 	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_A))
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_A) && check_inside(win, &win->player.p))
 	{
-		win->player.p.x += sin(win->player.angle * RAD);
-		win->player.p.y -= cos(win->player.angle * RAD);
+		win->player.p.x += sin(win->player.angle * M_PI / 180);
+		win->player.p.y -= cos(win->player.angle * M_PI / 180);
 	}
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_RIGHT))
 		win->player.angle++;
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
 		win->player.angle--;
 	win->player.p = ft_draw_map(win, win->map.elem, win->player.p);
-	//player_drawer(win->img, win->player.p, 0xFF322BFF);
 	start.x = win->player.p.x;
 	start.y = win->player.p.y;
 	i = -30;
@@ -203,14 +227,15 @@ void	ft_start(char *str)
 		win.map.wide++;
 		win.map.elem[win.map.wide] = get_next_line(fd);
 	}
-	win.mlx_ptr = mlx_init(win.map.wide * 50 + 20, HEIGHT, "Test", true);
+	win.mlx_ptr = mlx_init(HEIGHT, win.map.wide * 50 + 20, "Test", true);
 	if (!win.mlx_ptr)
 		error();
-	win.img = mlx_new_image(win.mlx_ptr, win.map.wide * 50 + 20, HEIGHT);
+	win.img = mlx_new_image(win.mlx_ptr, HEIGHT, win.map.wide * 50 + 20);
 	if (!win.img)
 		error();
+	win.player.p = assign_point(310, 60, 0); // first find the player and it is cordination.
 	win.player.p = ft_draw_map(&win, win.map.elem, win.player.p);
-	//printf("x=%d,y=%d",win.player.p.x, win.player.p.y);
+	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);
 	mlx_loop_hook(win.mlx_ptr, &keyhook, &win);
 	mlx_image_to_window(win.mlx_ptr, win.img, 0, 0);
 	mlx_loop(win.mlx_ptr);
@@ -231,3 +256,5 @@ int	main(int ac, char **av)
 	else
 		return (1);
 }
+
+
