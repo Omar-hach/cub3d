@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+         #
+#    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/02 22:56:05 by ohachami         ###   ########.fr        #
+#    Updated: 2023/09/12 22:48:22 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ $(NAME): $(OBJ) $(HEADER)
 
 clean:
 	make -C libft clean
-	rm -f *.o libft/*.o
-	rm -f *.o parsing/*.o
+	rm -f parsing/*.o 
+	
 
 fclean: clean
 	make -C libft fclean

@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/08/28 11:54:14 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/13 20:43:18 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_map
 {
 	int		lenght;
 	int		wide;
+	int		width;
 	char	**elem;
 }t_map;
 

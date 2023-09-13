@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 01:12:56 by ohachami          #+#    #+#             */
-/*   Updated: 2022/12/04 01:13:52 by ohachami         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:21:14 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include"get_next_line_bonus.h"
 
+
+#include "get_next_line_bonus.h"
 int	check_rest(char *rest)
 {
 	int	i;
@@ -28,7 +29,7 @@ int	check_rest(char *rest)
 char	*detect_new_line(char *line, char *buff, int fd, int *k)
 {
 	int		len;
-	ssize_t	i;
+	int	i;
 
 	i = 1;
 	while (i > 0)
@@ -63,6 +64,8 @@ char	*get_rest_and_line(char *line, char *rest, int k)
 	result = ft_calloc2(k + 1, 1);
 	while (line[i] != '\n' && line[i])
 	{
+		if(line[i] == ' ')
+			line[i] = '3';
 		result[i] = line[i];
 		i++;
 	}
@@ -99,7 +102,7 @@ char	*gnl(char *rest, char *buff, int fd)
 
 char	*get_next_line(int fd)
 {
-	ssize_t		i;
+	int		i;
 	char		*buff;
 	static char	rest[FOPEN_MAX][BUFFER_SIZE + 1];
 	int			count;

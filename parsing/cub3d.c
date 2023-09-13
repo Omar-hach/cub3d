@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-#define WIDTH 400
-#define HEIGHT 500
+#define WIDTH 1000
+#define HEIGHT 750
 
 t_point assign_point(int x, int y, int color)
 {
@@ -213,29 +213,29 @@ static void	error(void)
 void	ft_start(char *str)
 {
 	t_window win;
-	//nt i;
 	int j;
 	int fd = open(str, O_RDWR);
-
-
 	win.map.wide = 0;
+	win.map.width = 0;
 	win.map.elem = (char **)ft_calloc(100, sizeof(char *));
 	win.map.elem[win.map.wide] = get_next_line(fd);
 	while (win.map.elem[win.map.wide])
 	{
+		if(ft_strlen(win.map.elem[win.map.wide]) > win.map.width)
+			win.map.width = ft_strlen(win.map.elem[win.map.wide]);
 		printf("%s", win.map.elem[win.map.wide]);
-		win.map.wide++;
+		win.map.wide++;//map height
 		win.map.elem[win.map.wide] = get_next_line(fd);
 	}
+	win.map.width--;//map biggest width
 	win.mlx_ptr = mlx_init(HEIGHT, win.map.wide * 50 + 20, "Test", true);
 	if (!win.mlx_ptr)
 		error();
 	win.img = mlx_new_image(win.mlx_ptr, HEIGHT, win.map.wide * 50 + 20);
 	if (!win.img)
 		error();
-	win.player.p = assign_point(310, 60, 0); // first find the player and it is cordination.
+	win.player.p = assign_point(310, 60, 0); 
 	win.player.p = ft_draw_map(&win, win.map.elem, win.player.p);
-	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);
 	mlx_loop_hook(win.mlx_ptr, &keyhook, &win);
 	mlx_image_to_window(win.mlx_ptr, win.img, 0, 0);
 	mlx_loop(win.mlx_ptr);
