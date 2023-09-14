@@ -22,7 +22,9 @@ GLFW = $(shell brew --prefix glfw)
 
 FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
 
-SRC = parsing/cub3d.c 
+SRC = 	parsing/cub3d.c\
+		draw/ft_drawer.c\
+		draw/map_draw.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -36,8 +38,7 @@ $(NAME): $(OBJ) $(HEADER)
 
 clean:
 	make -C libft clean
-	rm -f *.o libft/*.o
-	rm -f *.o parsing/*.o
+	rm -f $(OBJ)
 
 fclean: clean
 	make -C libft fclean
