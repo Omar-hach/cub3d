@@ -12,7 +12,7 @@
 
 #include "../cub3d.h"
 #define WIDTH 1000
-#define HEIGHT 750
+#define HEIGHT 10000
 
 t_point assign_point(int x, int y, int color)
 {
@@ -110,7 +110,7 @@ t_point	ft_draw_map(t_window *win, char **matrix, t_point player)
 	i = -1;
 	j = -1;
 	start = assign_point(0, 0, 0);
-	end = assign_point(win->map.wide * 50 + 20, HEIGHT, 0);
+	end = assign_point(win->map.wide * 50 + 20, win->map.width * 50 + 20, 0);
 	cub_drawer(win->img, start, end, 0x909090FF);
 	end = assign_point(50, 50, 0);
 	while (++i < win->map.wide)
@@ -159,7 +159,7 @@ void	keyhook(void *param)
 
 	mlx_delete_image(win->mlx_ptr, win->img);
 	//printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	win->img = mlx_new_image(win->mlx_ptr, HEIGHT, win->map.wide * 50 + 20);
+	win->img = mlx_new_image(win->mlx_ptr, win->map.width * 50 + 20, win->map.wide * 50 + 20);
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_S) && check_inside(win, &win->player.p))
 	{
 		win->player.p.x -= cos(win->player.angle * M_PI / 180);
@@ -215,23 +215,37 @@ void	ft_start(char *str)
 	t_window win;
 	int j;
 	int fd = open(str, O_RDWR);
+	// char *dtr;
+	// int	dtrsize = 0;
 	win.map.wide = 0;
 	win.map.width = 0;
-	win.map.elem = (char **)ft_calloc(100, sizeof(char *));
+	// while(1)
+	// {
+	// 	dtr = get_next_line(fd);
+	// 	if(dtr == NULL)
+	// 		break;
+	// 		dtrsize++;
+	// }
+	
+	// close(fd);
+	// fd = open(str, O_RDWR);
+
+	win.map.wide = 0;
+	win.map.elem = (char **)ft_calloc(1000, sizeof(char *));
 	win.map.elem[win.map.wide] = get_next_line(fd);
 	while (win.map.elem[win.map.wide])
 	{
 		if(ft_strlen(win.map.elem[win.map.wide]) > win.map.width)
 			win.map.width = ft_strlen(win.map.elem[win.map.wide]);
 		printf("%s", win.map.elem[win.map.wide]);
-		win.map.wide++;//map height
+		win.map.wide++;//map win.map.width * 50 + 20
 		win.map.elem[win.map.wide] = get_next_line(fd);
 	}
 	win.map.width--;//map biggest width
-	win.mlx_ptr = mlx_init(HEIGHT, win.map.wide * 50 + 20, "Test", true);
+	win.mlx_ptr = mlx_init(win.map.width * 50 + 20, win.map.wide * 50 + 20, "Test", true);
 	if (!win.mlx_ptr)
 		error();
-	win.img = mlx_new_image(win.mlx_ptr, HEIGHT, win.map.wide * 50 + 20);
+	win.img = mlx_new_image(win.mlx_ptr, win.map.width * 50 + 20, win.map.wide * 50 + 20);
 	if (!win.img)
 		error();
 	win.player.p = assign_point(310, 60, 0); 
