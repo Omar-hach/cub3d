@@ -6,13 +6,13 @@
 #    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/12 22:48:22 by sbellafr         ###   ########.fr        #
+#    Updated: 2023/09/14 16:37:38 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-CC = gcc
+CC = cc
 
 HEADER = cub3d.h
 

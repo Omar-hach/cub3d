@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+         #
+#    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/08 20:02:09 by ohachami          #+#    #+#              #
-#    Updated: 2023/04/08 20:10:10 by ohachami         ###   ########.fr        #
+#    Updated: 2023/09/14 16:38:10 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CC = gcc 
+CC = cc 
 
 HEADER = libft.h
 

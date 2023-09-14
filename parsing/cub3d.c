@@ -229,7 +229,7 @@ void	ft_start(char *str)
 	close(fd);
 	fd = open(str, O_RDWR);
 
-	win.map.wide = 0;
+	// win.map.wide = 0;
 	win.map.elem = (char **)ft_calloc(dtrsize + 1, sizeof(char *));
 	win.map.elem[win.map.wide] = get_next_line(fd);
 	while (win.map.elem[win.map.wide])
