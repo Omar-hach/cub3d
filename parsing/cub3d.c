@@ -215,23 +215,22 @@ void	ft_start(char *str)
 	t_window win;
 	int j;
 	int fd = open(str, O_RDWR);
-	// char *dtr;
-	// int	dtrsize = 0;
+	char *dtr;
+	int	dtrsize = 0;
 	win.map.wide = 0;
 	win.map.width = 0;
-	// while(1)
-	// {
-	// 	dtr = get_next_line(fd);
-	// 	if(dtr == NULL)
-	// 		break;
-	// 		dtrsize++;
-	// }
-	
-	// close(fd);
-	// fd = open(str, O_RDWR);
+	while(1)
+	{
+		dtr = get_next_line(fd);
+		if(dtr == NULL)
+			break;
+			dtrsize++;
+	}
+	close(fd);
+	fd = open(str, O_RDWR);
 
 	win.map.wide = 0;
-	win.map.elem = (char **)ft_calloc(1000, sizeof(char *));
+	win.map.elem = (char **)ft_calloc(dtrsize + 1, sizeof(char *));
 	win.map.elem[win.map.wide] = get_next_line(fd);
 	while (win.map.elem[win.map.wide])
 	{
