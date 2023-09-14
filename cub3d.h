@@ -36,7 +36,7 @@ typedef struct s_point
 typedef struct s_player
 {
 	t_point p;
-	float angle;
+	int angle;
 }t_player;
 
 typedef struct s_color
@@ -59,13 +59,23 @@ typedef struct s_window
 	void		*win_ptr;
 	t_player	player;
 	mlx_image_t	*img;
+	mlx_image_t *img2;
 	mlx_t		*mlx_ptr;
     t_map       map;
 }t_window;
 
 
 
-void    ft_start_map(char *map);
+void	ft_start_map(char *map);
+void	draw_line(t_window *win, t_point start, t_point end);
+void	cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
+t_point	player_drawer(mlx_image_t *img, t_point pos, t_player player,  int color);
+void	ft_draw_map(t_window *win, char **matrix, t_player *player);
+t_point	assign_point(int x, int y, int color);
+int		angle_adjast(int angle, char sign);
+void init_val(t_window	*win);
+
+void	error(void);
 
 #endif
 
