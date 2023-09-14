@@ -81,7 +81,6 @@ char	*get_rest_and_line(char *line, char *rest, int k)
 	}
 	rest[k] = '\0';
 	free (line);
-	line = NULL;
 	return (result);
 }
 

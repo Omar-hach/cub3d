@@ -6,7 +6,7 @@
 #    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/14 16:37:38 by sbellafr         ###   ########.fr        #
+#    Updated: 2023/09/14 22:01:27 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,9 @@ GLFW = $(shell brew --prefix glfw)
 
 FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
 
-SRC = parsing/cub3d.c 
+SRC = 	parsing/cub3d.c\
+		draw/ft_drawer.c\
+		draw/map_draw.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -36,8 +38,7 @@ $(NAME): $(OBJ) $(HEADER)
 
 clean:
 	make -C libft clean
-	rm -f parsing/*.o 
-	
+	rm -f $(OBJ)
 
 fclean: clean
 	make -C libft fclean
