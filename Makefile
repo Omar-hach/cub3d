@@ -6,7 +6,7 @@
 #    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/14 22:01:27 by sbellafr         ###   ########.fr        #
+#    Updated: 2023/09/16 12:06:43 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ GLFW = $(shell brew --prefix glfw)
 FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
 
 SRC = 	parsing/cub3d.c\
+		parsing/check_map.c\
+		parsing/check_textures.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c
 

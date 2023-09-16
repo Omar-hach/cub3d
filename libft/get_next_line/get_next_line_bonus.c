@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 01:12:56 by ohachami          #+#    #+#             */
-/*   Updated: 2023/09/13 17:21:14 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:33:39 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ char	*get_rest_and_line(char *line, char *rest, int k)
 	result = ft_calloc2(k + 1, 1);
 	while (line[i] != '\n' && line[i])
 	{
-		if(line[i] == ' ')
-			line[i] = '3';
 		result[i] = line[i];
 		i++;
 	}
