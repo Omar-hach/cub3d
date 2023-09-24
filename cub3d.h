@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/16 18:35:59 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/23 16:28:27 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include "libft/print/ft_printf.h"
 # include "libft/get_next_line/get_next_line_bonus.h"
 # include "MLX42/MLX42.h"
-//# define PI 3.141592653589793
-# define RAD 0.0174533
+# define PI 3.141592653589793
+# define RAD 0.0174533 //N = PI / 2 ||W =  PI || S = PI * 3 / 2 || E = 0
 typedef struct s_textures
 {
 	char *no;
@@ -46,7 +46,7 @@ typedef struct s_point
 typedef struct s_player
 {
 	t_point p;
-	int angle;
+	float angle;
 }t_player;
 
 typedef struct s_color
@@ -62,7 +62,8 @@ typedef struct s_map
 	int		lenght;
 	int		wide;
 	int		width;
-	char	**elem;
+	char	**mapc;
+	char	**mapo;
 }t_map;
 
 typedef struct s_window
@@ -84,10 +85,10 @@ t_point	player_drawer(mlx_image_t *img, t_point pos, t_player player,  int color
 void	ft_draw_map(t_window *win, char **matrix, t_player *player);
 t_point	assign_point(int x, int y, int color);
 int		angle_adjast(int angle, char sign);
-void	init_val(t_window	*win);
+void 	init_val(t_window	*win, t_player *player);
 int		check_first_line(char *str);
 void	check_zero_surrond(char **strs);
-void    check_textures(char **strs, t_textures *t);
+int    check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling);
 void	error(void);
 
 #endif

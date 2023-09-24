@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_draw.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 19:16:33 by ohachami          #+#    #+#             */
-/*   Updated: 2023/09/14 19:16:35 by ohachami         ###   ########.fr       */
+/*   Updated: 2023/09/21 23:26:38 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	draw_line(t_window *win, t_point start, t_point end)
 	{
 		printf("y=%d x=%d\n", (int)pixels.y / 50, (int)pixels.x / 50);
 		printf("y=%d x=%d\n", (int)start.y, (int)start.x);
-		if (win->map.elem[(int)pixels.x / 50][(int)pixels.y / 50] == '1') // the problem is here pixels.y overflow
+		if (win->map.mapo[(int)pixels.x / 50][(int)pixels.y / 50] == '1') // the problem is here pixels.y overflow
 			break ;
 		mlx_put_pixel(win->img, (int)pixels.x, (int)pixels.y, 0x1100FFff);
 		pixels.x += steps.x;

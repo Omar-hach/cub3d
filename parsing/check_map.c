@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 23:31:08 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/16 11:51:54 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/23 11:20:01 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	check_elements(char **strs)
 	}
 	if(count > 0)
 	{
-		printf("er ror\n");
+		printf("error\n");
 		exit(0);
 	}
 }

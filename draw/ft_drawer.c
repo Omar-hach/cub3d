@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 19:03:30 by ohachami          #+#    #+#             */
-/*   Updated: 2023/09/14 22:33:42 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/23 20:55:38 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int check_inside(t_window *win, t_point *player)
 		player->x += !j;
 		return(0);
 	}
-	if(win->map.elem[i][j] == '1')
+	if(win->map.mapo[i][j] == '1')
 	{
-		if(win->map.elem[i + 1][j] == '1' || win->map.elem[i - 1][j] == '1')
+		if(win->map.mapo[i + 1][j] == '1' || win->map.mapo[i - 1][j] == '1')
 			player->y--;
-		if(win->map.elem[i][j + 1] == '1' || win->map.elem[i][j - 1] == '1')
+		if(win->map.mapo[i][j + 1] == '1' || win->map.mapo[i][j - 1] == '1')
 			player->x--;
 		return(0);
 	}
@@ -65,7 +65,7 @@ void	keyhook(void *param)
 	t_window	*win = (t_window *)param;
 	//t_point		start;
 	//t_point		end;
-	//int			i;
+	// int			i;
 
 	mlx_delete_image(win->mlx_ptr, win->img);
 	//mlx_delete_image(win->mlx_ptr, win->img2);
@@ -104,13 +104,13 @@ void	keyhook(void *param)
 	{
 		win->player.angle = angle_adjast(win->player.angle, '-');
 	}
-	ft_draw_map(win, win->map.elem, &win->player);
+	ft_draw_map(win, win->map.mapo, &win->player);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 	// mlx_image_to_window(win->mlx_ptr, win->img2, 0, 0);
 	//win->img2 = mlx_put_string(win->mlx_ptr, "lol", 00, 00);
 }
 
-void init_val(t_window	*win)
+void init_val(t_window	*win, t_player *player)
 {
 	win->mlx_ptr = mlx_init(win->map.lenght * 50 + 20, win->map.wide * 50 + 20, "Test", true);
 	if (!win->mlx_ptr)
@@ -118,9 +118,8 @@ void init_val(t_window	*win)
 	win->img = mlx_new_image(win->mlx_ptr, win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
 	if (!win->img)
 		error();
-	win->player.p = assign_point(310, 60, 0); // first find the player and it is cordination.
-	win->player.angle = 0;
-	ft_draw_map(win, win->map.elem, &win->player);
+	win->player.p = assign_point(player->p.x + 10, player->p.y + 10, 0); // first find the player and it is cordination.
+	ft_draw_map(win, win->map.mapo, &win->player);
 	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);
 	mlx_loop_hook(win->mlx_ptr, &keyhook, win);
 	ft_printf(" |OK| \n");
