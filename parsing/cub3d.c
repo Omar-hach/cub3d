@@ -143,6 +143,7 @@ int main(int ac, char **av)
 			i++;
 		}
 		i = check_textures(strs, &t, &floor, &ceiling);
+		check_map(strs, i);
 		ft_start(av[1], i);
 
 	}

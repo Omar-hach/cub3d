@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/23 16:28:27 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/24 16:14:06 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int		check_first_line(char *str);
 void	check_zero_surrond(char **strs);
 int    check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling);
 void	error(void);
+void	check_map(char **strs, int start);
 
 #endif
 
