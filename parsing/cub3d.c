@@ -112,8 +112,6 @@ void ft_start(char *str, int i)
 	while(win.map.mapo[i])
 		i++;	
 	get_player_location(&win,&player, win.map.mapo);
-
-	 
 	win.map.lenght--;
 	win.map.wide = i;
 	init_val(&win ,&player);

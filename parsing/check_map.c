@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 23:31:08 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/24 19:02:28 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:13:15 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,17 @@ void	check_map(char **strs, int start)
 
 	j = 0;
 	i = 0;
-	int	end = start
-	while(strs[start][0] != '1')
+	while(strs[start + 1][0] != '1')
+	{
+		if(strs[start + 1][0] != '\n')
+		{
+			printf("there is an external component\n");
+			exit(2);
+		}
 		start++;
+	}
 	while(strs[start + 1])
 	{
-		
 		if(strs[start + 1][0] == '\n')
 		{
 			printf("Error a new line in the map\n");
@@ -139,7 +144,7 @@ void	check_map(char **strs, int start)
 		}
 		start++;
 	}
-	
+
 	i = 0;
 	j = 0;
 	while(strs[i])
@@ -152,7 +157,7 @@ void	check_map(char **strs, int start)
 				printf("Error there is a tab in the map\n");
 				exit(0);
 			}	
-				j++;
+				j++;	
 		}
 		i++;
 	}
