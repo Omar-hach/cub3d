@@ -112,6 +112,8 @@ void ft_start(char *str, int i)
 	while(win.map.mapo[i])
 		i++;	
 	get_player_location(&win,&player, win.map.mapo);
+	check_map(win.map.mapo);
+	check_zero_surrond(win.map.mapo);
 	win.map.lenght--;
 	win.map.wide = i;
 	init_val(&win ,&player);
@@ -120,7 +122,6 @@ void ft_start(char *str, int i)
 
 int main(int ac, char **av)
 {
-
 	int fd;
 	char **strs;
 	int i;
@@ -141,7 +142,6 @@ int main(int ac, char **av)
 			i++;
 		}
 		i = check_textures(strs, &t, &floor, &ceiling);
-		check_map(strs, i);
 		ft_start(av[1], i);
 
 	}
