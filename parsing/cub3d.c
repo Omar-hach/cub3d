@@ -43,9 +43,8 @@ void free_all(t_window *win, char **elem)
 void	ft_start(char *str)
 {
 	t_window win;
-	//nt i;
+	//int i;
 	int fd = open(str, O_RDWR);
-
 
 	win.map.wide = 0;
 	win.map.lenght = 0;
