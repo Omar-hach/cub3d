@@ -26,8 +26,8 @@ int	check_inside(t_window *win, t_point *player)
 	int	i;
 	int	j;
 
-	i = (player->y + 15) / 50;
-	j = (player->x + 15) / 50;
+	i = (player->y - 10) / 50;
+	j = (player->x - 10) / 50;
 	//ft_printf("x=%d,y=%d,angle=[%d][%d]\n",win->map.lenght,win->map.wide,  i, j);
 	if (win->map.elem[i][j] == '1')
 			return (0);
@@ -79,7 +79,7 @@ void	init_val(t_window	*win)
 	win->img = mlx_new_image(win->mlx_ptr, win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
 	if (!win->img)
 		error();
-	win->player.p = assign_point(360, 110); // first find the player and it is cordination.
+	win->player.p = assign_point(360 + 25, 110 + 25); // first find the player and it is cordination.
 	win->player.angle = 0;
 	ft_draw_map(win, win->map.elem, &win->player.p);
 	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);

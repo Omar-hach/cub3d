@@ -33,10 +33,10 @@ void	draw_line(t_window *win, t_point start, t_point end)
 	int		i;
 
 
-	dp.x = end.x - start.x - 25;
-	dp.y = end.y - start.y - 25;
-	pk.x = start.x + 25;
-	pk.y = start.y + 25;
+	dp.x = end.x - start.x;
+	dp.y = end.y - start.y;
+	pk.x = start.x;
+	pk.y = start.y;
 	if (fabs(dp.x) > fabs(dp.y))
 		step = fabs(dp.x) ;
 	else
@@ -106,14 +106,6 @@ t_point	player_drawer(t_window *win, t_point pos, double angle, int color)
 		+ pos.x * (pos.x <= win->map.lenght * 50 + 20);
 	pos.y = (pos.y < 1) * (win->map.wide * 50 + 10)
 		+ pos.y * (pos.y <= win->map.wide * 50 + 20);
-	//printf("x=%.2f,.,y=%.2f\n", pos.x, pos.y);
-	/*while (++r < 25)
-	{
-		//ft_printf("x=%d,.,y=%d\n", (int)(pos.x + 25 + r * cos(angle)),
-		//		(int)(pos.y + 25 + r * sin(angle)));
-		mlx_put_pixel(win->img, pos.x + 25 + r * cos(angle),
-				pos.y + 25 + r * sin(angle), color);//this ray may causse segfault in edge of the map
-	}*/
 	r = 0;
 	deg = 0;
 	while (r < 11)
@@ -121,8 +113,8 @@ t_point	player_drawer(t_window *win, t_point pos, double angle, int color)
 		deg = 0;
 		while (deg < M_PI * 2)
 		{
-			mlx_put_pixel(win->img, pos.x + 25 + r * cos(deg),
-				pos.y + 25 + r * sin(deg), color);
+			mlx_put_pixel(win->img, pos.x + r * cos(deg),
+				pos.y + r * sin(deg), color);
 			deg += M_PI / 180;
 		}
 		r++;
@@ -224,7 +216,6 @@ void	ft_draw_map(t_window *win, char **matrix, t_point *pos)
 	end = assign_point(win->map.wide * 50 + 20, win->map.lenght * 50 + 20);
 	cub_drawer(win->img, start, end, 0x909090FF);
 	end = assign_point(50, 50);
-
 	while (++i < win->map.wide)
 	{
 		j = -1;
