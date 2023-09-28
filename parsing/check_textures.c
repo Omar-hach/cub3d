@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 12:06:21 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/25 20:27:35 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/27 15:22:56 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void ft_rgb(char *str, t_color *color)
 			buffer[j] = '\0';
 			color->b = ft_atoi(buffer);
 		}
+		i++;
 	}
 	i = 0;
 	j = 0;
@@ -168,11 +169,11 @@ int check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling)
 		}
 		i++;
 	}
-	check_textures_rgb(t);
 	if(count != 6)
 	{
-		printf("error check the tetures or thr rgb\n");
+		printf("error check the textures or thr rgb\n");
 		exit(2);
 	}
+	check_textures_rgb(t);
 	return (last_line);
 }

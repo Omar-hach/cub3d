@@ -6,7 +6,7 @@
 #    By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/20 19:10:39 by sbellafr         ###   ########.fr        #
+#    Updated: 2023/09/27 16:05:18 by sbellafr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = cc
 
 HEADER = cub3d.h
 
-#CFLAGS = -Werror -Wall -Wextra #-fsanitize=address
+CFLAGS = #-fsanitize=address -g #-Werror -Wall -Wextra 
 
 GLFW = $(shell brew --prefix glfw)
 
@@ -33,10 +33,9 @@ OBJ = $(SRC:.c=.o)
 LIBFT = libft/libft.a MLX42/libmlx42.a -I$() -lglfw
 
 all:$(NAME)
-
 $(NAME): $(OBJ) $(HEADER)
 	make -C libft
-	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	$(CC)  $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 clean:
 	make -C libft clean

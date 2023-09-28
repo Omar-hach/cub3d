@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/26 19:55:39 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:08:12 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_map
 
 typedef struct s_window
 {
-	void		*win_ptr;
+	// void		*win_ptr;
 	t_player	player;
 	mlx_image_t	*img;
 	mlx_image_t *img2;
@@ -88,9 +88,9 @@ int		angle_adjast(int angle, char sign);
 void 	init_val(t_window	*win, t_player *player);
 int		check_first_line(char *str);
 void	check_zero_surrond(char **strs);
-int    check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling);
+int  	check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling);
 void	error(void);
-
+void check_tab(char **strs);
 void	check_map(char **strs);
 
 #endif

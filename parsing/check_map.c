@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 23:31:08 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/26 20:19:26 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/27 13:18:46 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void check_tab(char **strs)
 		{
 			if (strs[i][j] && strs[i][j] == '\t')
 			{
-				printf("Error\n");
+				printf("Error there is a tab in the map\n");
 				exit(0);
 			}
 			j++;
@@ -115,7 +115,7 @@ void check_zero_surrond(char **strs)
 		}
 		i++;
 	}
-	// check_tab(strs);
+	check_tab(strs);
 	// check_elements(strs);
 }
 
@@ -127,7 +127,6 @@ void	check_map(char **strs)
 	j = 0;
 	i = 0;
 	check_first_line(strs[0]);
-	printf("%s\n", strs[0]);
 	
 	while(strs[i + 1][0] != '1')
 	{
