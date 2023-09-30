@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/30 23:44:54 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/30 23:45:54 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ typedef struct s_segm
 	t_point	end;
 }t_segm;
 
+typedef struct s_player
+{
+	t_point	p;
+	double	angle;
+}t_player;
 
 typedef struct s_window
 {
@@ -71,11 +76,11 @@ typedef struct s_textures
 // 	int	color;
 // }t_point;
 
-typedef struct s_player
-{
-	t_point p;
-	float angle;
-}t_player;
+// typedef struct s_player
+// {
+// 	t_point p;
+// 	float angle;
+// }t_player;
 
 typedef struct s_color
 {
