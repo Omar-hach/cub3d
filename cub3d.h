@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/27 16:08:12 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/09/30 23:44:54 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,34 @@
 # include "MLX42/MLX42.h"
 # define PI 3.141592653589793
 # define RAD 0.0174533 //N = PI / 2 ||W =  PI || S = PI * 3 / 2 || E = 0
+
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+}t_vector;
+
+typedef struct s_point
+{
+	double	x;
+	double	y;
+}t_point;
+
+typedef struct s_segm
+{
+	t_point	start;
+	t_point	end;
+}t_segm;
+
+
+typedef struct s_window
+{
+	void		*win_ptr;
+	t_player	player;
+	mlx_image_t	*img;
+	mlx_t		*mlx_ptr;
+	t_map		map;
+}t_window;
 typedef struct s_textures
 {
 	char *no;
@@ -36,12 +64,12 @@ typedef struct s_textures
 
 }t_textures;
 
-typedef struct s_point
-{
-	int	x;
-	int	y;
-	int	color;
-}t_point;
+// typedef struct s_point
+// {
+// 	int	x;
+// 	int	y;
+// 	int	color;
+// }t_point;
 
 typedef struct s_player
 {
@@ -66,25 +94,25 @@ typedef struct s_map
 	char	**mapo;
 }t_map;
 
-typedef struct s_window
-{
-	// void		*win_ptr;
-	t_player	player;
-	mlx_image_t	*img;
-	mlx_image_t *img2;
-	mlx_t		*mlx_ptr;
-    t_map       map;
-}t_window;
+// typedef struct s_window
+// {
+// 	// void		*win_ptr;
+// 	t_player	player;
+// 	mlx_image_t	*img;
+// 	mlx_image_t *img2;
+// 	mlx_t		*mlx_ptr;
+//     t_map       map;
+// }t_window;
 
 
 
 void	ft_start_map(char *map);
 void	draw_line(t_window *win, t_point start, t_point end);
 void	cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
-t_point	player_drawer(mlx_image_t *img, t_point pos, t_player player,  int color);
-void	ft_draw_map(t_window *win, char **matrix, t_player *player);
-t_point	assign_point(int x, int y, int color);
-int		angle_adjast(int angle, char sign);
+t_point player_drawer(t_window *win, t_point pos, double angle, int color);
+void    ft_draw_map(t_window *win, char **matrix, t_point *pos);
+t_point	assign_point(int x, int y);
+double  angle_adjast(double angle, char sign);
 void 	init_val(t_window	*win, t_player *player);
 int		check_first_line(char *str);
 void	check_zero_surrond(char **strs);
@@ -92,6 +120,7 @@ int  	check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceilin
 void	error(void);
 void check_tab(char **strs);
 void	check_map(char **strs);
+int	check_inside(t_window *win, t_point *player);
 
 #endif
 
