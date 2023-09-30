@@ -81,10 +81,10 @@ void ft_start(char *str, int i, char **strs)
 
 	win.map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
 	j = 0;
-	i = 0;
-	while (strs[i][0] == '\n')
+	// i = 0;
+	while (strs[i + 1][0] == '\n')
 		i++;
-	
+	i++;
 	check_tab(strs);
 	while (strs[i])
 	{
