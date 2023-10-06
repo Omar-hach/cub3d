@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-#define WIDTH 400
-#define HEIGHT 500
 
 // static void ft_error(void)
-// 
+//
 // 	fprintf(stderr, "%s", mlx_strerror(mlx_errno));
 // 	exit(EXIT_FAILURE);
 // }
@@ -70,4 +68,3 @@ int	main(int ac, char **av)
 	else
 		return (1);
 }
-
