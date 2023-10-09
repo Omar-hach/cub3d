@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 19:16:50 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/30 23:47:39 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/10/08 22:25:09 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,42 +77,16 @@ typedef struct s_textures
 
 }t_textures;
 
-// typedef struct s_point
-// {
-// 	int	x;
-// 	int	y;
-// 	int	color;
-// }t_point;
 
-// typedef struct s_player
-// {
-// 	t_point p;
-// 	float angle;
-// }t_player;
-// typedef struct s_map
-// {
-// 	int		lenght;
-// 	int		wide;
-// 	char	**elem;
-// }t_map;
 typedef struct s_color
 {
-	int	t;
+	// int	t;
 	int	r;
 	int	b;
 	int	g;
 }t_color;
 
 
-// typedef struct s_window
-// {
-// 	// void		*win_ptr;
-// 	t_player	player;
-// 	mlx_image_t	*img;
-// 	mlx_image_t *img2;
-// 	mlx_t		*mlx_ptr;
-//     t_map       map;
-// }t_window;
 
 
 
@@ -123,7 +97,7 @@ t_point player_drawer(t_window *win, t_point pos, double angle, int color);
 void    ft_draw_map(t_window *win, char **matrix, t_point *pos);
 t_point	assign_point(int x, int y);
 double  angle_adjast(double angle, char sign);
-void    init_val(t_window       *win);
+void 	init_val(t_window	*win, t_player *player);
 int		check_first_line(char *str);
 void	check_zero_surrond(char **strs);
 int  	check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling);
@@ -133,5 +107,7 @@ void	check_map(char **strs);
 int	check_inside(t_window *win, t_point *player);
 
 #endif
+
+
 
 

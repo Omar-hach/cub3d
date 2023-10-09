@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 19:03:30 by ohachami          #+#    #+#             */
-/*   Updated: 2023/09/30 23:41:36 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/10/09 23:17:47 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_inside(t_window *win, t_point *player)
 	i = (player->y - 10) / 50;
 	j = (player->x - 10) / 50;
 	//ft_printf("x=%d,y=%d,angle=[%d][%d]\n",win->map.lenght,win->map.wide,  i, j);
-	if (win->map.elem[i][j] == '1')
+	if (win->map.mapo[i][j] != '0' && win->map.mapo[i][j] != 'P') //may cause probleme
 			return (0);
 	return (1);
 }
@@ -65,23 +65,23 @@ void	keyhook(void *param)
 		win->player.angle = angle_adjast(win->player.angle, '+');
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
 		win->player.angle = angle_adjast(win->player.angle, '-');
-	ft_draw_map(win, win->map.elem, &start);
+	ft_draw_map(win, win->map.mapo, &start);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 	// mlx_image_to_window(win->mlx_ptr, win->img2, 0, 0);
 	//win->img2 = mlx_put_string(win->mlx_ptr, "lol", 00, 00);
 }
 
-void	init_val(t_window	*win)
+void	init_val(t_window	*win, t_player *player)
 {
-	win->mlx_ptr = mlx_init(win->map.lenght * 50 + 20, win->map.wide * 50 + 20, "Test", true);
+	win->mlx_ptr = mlx_init(win->map.lenght * 50 + 20, win->map.wide * 50 + 20, "Super Duper Cool 3D Game!!!!!", true);
 	if (!win->mlx_ptr)
 		error();
 	win->img = mlx_new_image(win->mlx_ptr, win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
 	if (!win->img)
 		error();
-	win->player.p = assign_point(360 + 25, 110 + 25); // first find the player and it is cordination.
+	win->player.p = assign_point(300 + 25, 110 + 25); // first find the player and it is cordination.
 	win->player.angle = 0;
-	ft_draw_map(win, win->map.elem, &win->player.p);
+	ft_draw_map(win, win->map.mapo, &win->player.p);
 	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);
 	mlx_loop_hook(win->mlx_ptr, &keyhook, win);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);

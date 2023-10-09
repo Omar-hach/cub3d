@@ -60,8 +60,8 @@ void get_player_location(t_window *win, t_player *player, char **mapo)
 			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
 			{
 				get_angle(mapo[i][j], player);
-				player->p.y = i * 50;
-				player->p.x = j * 50;
+				player->p.y = i * 50 + 25;
+				player->p.x = j * 50 + 25;
 			}
 			j++;
 		}
@@ -70,6 +70,7 @@ void get_player_location(t_window *win, t_player *player, char **mapo)
 }
 void ft_start(char *str, int i, char **strs)
 {
+
 	t_player player;
 	t_window win;
 	int j;
@@ -78,10 +79,9 @@ void ft_start(char *str, int i, char **strs)
 	int dtrsize = 0;
 	win.map.wide = 0;
 	win.map.lenght = 0;
-
+	
 	win.map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
 	j = 0;
-	// i = 0;
 	while (strs[i + 1][0] == '\n')
 		i++;
 	i++;
@@ -90,20 +90,21 @@ void ft_start(char *str, int i, char **strs)
 	{
 		if (ft_strlen(strs[i]) > win.map.lenght)
 			win.map.lenght = ft_strlen(strs[i]);
-		win.map.mapo[j] = ft_strdup(strs[i]);
-		printf("%s\n", win.map.mapo[j]);
+			win.map.mapo[j] = ft_calloc(ft_strlen(strs[i]) + 2, 1);
+		win.map.mapo[j] = strs[i];
 		j++;
 		i++;
 	}
 	i = 0;
+	j = 0;
 	while (win.map.mapo[i])
 		i++;
 	get_player_location(&win, &player, win.map.mapo);
 	check_map(win.map.mapo);
+
 	check_zero_surrond(win.map.mapo);
 	win.map.lenght--;
 	win.map.wide = i;
-
 	init_val(&win, &player);
 	free_all(&win, strs);
 }
@@ -116,12 +117,22 @@ int main(int ac, char **av)
 	t_textures t;
 	t_color floor;
 	t_color ceiling;
-
+	char	*str;
 	i = 0;
 	if (ac == 2)
 	{
-		strs = (char **)ft_calloc(100, sizeof(char *));
 		fd = open(av[1], O_RDWR);
+		while(1)
+		{
+			str = get_next_line(fd);
+			if(!str)
+				break;
+			i++;
+		}
+		close(fd);
+		strs = (char **)ft_calloc(i + 1, sizeof(char *));
+		fd = open(av[1], O_RDWR);
+		i = 0;
 		while (1)
 		{
 			strs[i] = get_next_line(fd);
@@ -129,6 +140,7 @@ int main(int ac, char **av)
 				break;
 			i++;
 		}
+
 		i = check_textures(strs, &t, &floor, &ceiling);
 		ft_start(av[1], i, strs);
 	}

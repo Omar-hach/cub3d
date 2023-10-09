@@ -6,19 +6,101 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 12:06:21 by sbellafr          #+#    #+#             */
-/*   Updated: 2023/09/27 15:22:56 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/10/09 01:51:48 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+void ft_rgb_c(char *str, t_color *color)
+{
+	int i = 0;
+	int j = 0;
+	int count = 0;
+	char *buffer = malloc(3);
+	while (str[i])
+	{
+
+		if (ft_isalpha(str[i]))
+		{
+
+			i++;
+			while (!ft_isalnum(str[i]))
+				i++;
+			if (ft_isalnum(str[i]))
+			{
+				count++;
+				while (str[i] && ft_isalnum(str[i]))
+				{
+					buffer[j] = str[i];
+					i++;
+					j++;
+				}
+			}
+			buffer[j] = '\0';
+			printf("%c\n", str[i]);
+			printf("%d\n", i);
+			color->r = ft_atoi(buffer);
+			while (!ft_isalnum(str[i]) && str[i])
+				i++;
+			j = 0;
+			while (str[i] && ft_isalnum(str[i]))
+			{
+				buffer[j] = str[i];
+				i++;
+				j++;
+			}
+			buffer[j] = '\0';
+			color->g = ft_atoi(buffer);
+			while (!ft_isalnum(str[i]) && str[i])
+				i++;
+			j = 0;
+			while (str[i] && ft_isalnum(str[i]))
+			{
+				buffer[j] = str[i];
+				i++;
+				j++;
+			}
+			while (str[i])
+			{
+				if (str[i] != ' ' && str[i] != '\n')
+				{
+
+					printf("Error : check the rgb please\n");
+					exit(2);
+				}
+				i++;
+			}
+
+			buffer[j] = '\0';
+			color->b = ft_atoi(buffer);
+		}
+		i++;
+	}
+	i = 0;
+	j = 0;
+
+	while (str[i])
+	{
+		if (str[i] == ',')
+			j++;
+		i++;
+	}
+
+	if (j > 2)
+	{
+		printf("Error : check the rgb \n");
+		exit(2);
+	}
+}
 void ft_rgb(char *str, t_color *color)
 {
 	int i = 0;
 	int j = 0;
-	char *buffer = malloc(3);
+	char *buffer = malloc(13);
 	while (str[i])
 	{
+
 		if (ft_isalpha(str[i]))
 		{
 			i++;
@@ -52,15 +134,16 @@ void ft_rgb(char *str, t_color *color)
 				i++;
 				j++;
 			}
-			while(str[i])
+			while (str[i])
 			{
-				if(str[i] != ' ' && str[i] != '\n')
+				if (str[i] != ' ' && str[i] != '\n')
 				{
 					printf("Error : check the rgb please\n");
 					exit(2);
 				}
 				i++;
 			}
+
 			buffer[j] = '\0';
 			color->b = ft_atoi(buffer);
 		}
@@ -68,27 +151,28 @@ void ft_rgb(char *str, t_color *color)
 	}
 	i = 0;
 	j = 0;
-	while(str[i])
+	while (str[i])
 	{
-		if(str[i] == ',')
+		if (str[i] == ',')
 			j++;
 		i++;
 	}
-	if(j > 2)
+
+	if (j > 2)
 	{
 		printf("Error : check the rgb \n");
 		exit(2);
 	}
 }
-void	check_textures_rgb(t_textures *t)
+void check_textures_rgb(t_textures *t)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	// i++;
-	while(t->c[i])
+	while (t->c[i])
 	{
-		if(!ft_isdigit(t->c[i]) && t->c[i] != 'C' && t->c[i] != ' ' && t->c[i] != ','  && t->c[i] != '\n')
+		if (!ft_isdigit(t->c[i]) && t->c[i] != 'C' && t->c[i] != ' ' && t->c[i] != ',' && t->c[i] != '\n')
 		{
 			printf("error there is an external component\n");
 			exit(2);
@@ -96,9 +180,9 @@ void	check_textures_rgb(t_textures *t)
 		i++;
 	}
 	i = 0;
-	while(t->f[i])
+	while (t->f[i])
 	{
-		if(!ft_isdigit(t->f[i]) && t->f[i] != 'F' && t->f[i] != ' ' && t->f[i] != ','  && t->f[i] != '\n')
+		if (!ft_isdigit(t->f[i]) && t->f[i] != 'F' && t->f[i] != ' ' && t->f[i] != ',' && t->f[i] != '\n')
 		{
 			printf("error there is an external component\n");
 			exit(2);
@@ -118,6 +202,7 @@ int check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling)
 	j = 0;
 	while (strs[i])
 	{
+
 		j = 0;
 		while (strs[i][j])
 		{
@@ -163,15 +248,16 @@ int check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling)
 				if (i > last_line)
 					last_line = i;
 				t->c = ft_strdup(strs[i]);
-				ft_rgb(t->c, ceiling);
+				ft_rgb_c(t->c, ceiling);
 			}
 			j++;
 		}
 		i++;
 	}
-	if(count != 6)
+
+	if (count != 6)
 	{
-		printf("error check the textures or thr rgb\n");
+		printf("error check the textures or the rgb\n");
 		exit(2);
 	}
 	check_textures_rgb(t);
