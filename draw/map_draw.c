@@ -6,7 +6,7 @@
 /*   By: sbellafr <sbellafr@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 19:16:33 by ohachami          #+#    #+#             */
-/*   Updated: 2023/10/09 23:18:23 by sbellafr         ###   ########.fr       */
+/*   Updated: 2023/10/09 23:59:10 by sbellafr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,19 +221,20 @@ void	ft_draw_map(t_window *win, char **matrix, t_point *pos)
 	end = assign_point(win->map.wide * 50 + 20, win->map.lenght * 50 + 20);
 	cub_drawer(win->img, start, end, 0x909090FF);
 	end = assign_point(50, 50);
-	while (++i < win->map.wide)
+	while (matrix[++i])
 	{
-		j = -1;
-		while (++j < win->map.lenght)
+		j = 0;
+		while (matrix[i][j])
 		{
 			start = assign_point(j * 50 + 10, i * 50 + 10);
-			if (matrix[i][j] == '1')
+			if (matrix[i][j] == '1')	
 				cub_drawer(win->img, start, end, 0x09005EFF);
-			else if ((matrix[i][j] != ' ' && matrix[i][j] != '\n')
-				|| !matrix[i][j])
+			else if (matrix[i][j] == '0' || matrix[i][j] == 'E' || matrix[i][j] == 'S' || matrix[i][j] == 'W'|| matrix[i][j] == 'N')
 				cub_drawer(win->img, start, end, 0xB8A649FF);
+			j++;
 		}
 	}
+	
 	if(check_inside(win, pos))
 		win->player.p = player_drawer(win, *pos, win->player.angle, 0xFF322BFF);
 	else
