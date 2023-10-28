@@ -38,33 +38,97 @@ void free_all(t_window *win, char **elem)
 	mlx_terminate(win->mlx_ptr);
 }
 
-void	ft_start(char *str)
+void get_angle(char c, t_player *player)
 {
-	t_window win;
-	//int i;
-	int fd = open(str, O_RDWR);
-
-	win.map.wide = 0;
-	win.map.lenght = 0;
-	win.map.elem = (char **)ft_calloc(100, sizeof(char *));
-	win.map.elem[0] = get_next_line(fd);
-	while (win.map.elem[win.map.wide])
+	if (c == 'E')
+		player->angle = 0;
+	else if (c == 'N')
+		player->angle = M_PI_2;
+	else if (c == 'W')
+		player->angle = M_PI;
+	else if (c == 'S')
+		player->angle = M_PI_2 * 3;
+}
+void get_player_location(t_player *player, char **mapo)
+{
+	int i = 0;
+	int j = 0;
+	while (mapo[i])
 	{
-		if(ft_strlen(win.map.elem[win.map.wide]) > win.map.lenght)
-			win.map.lenght = ft_strlen(win.map.elem[win.map.wide]);
-		printf("%s", win.map.elem[win.map.wide]);
-		win.map.wide++;
-		win.map.elem[win.map.wide] = get_next_line(fd);
+		j = 0;
+		while (mapo[i][j])
+		{
+			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
+			{
+				get_angle(mapo[i][j], player);
+				player->p.y = i * 10 + 5;
+				player->p.x = j * 10 + 5;
+			}
+			j++;
+		}
+		i++;
 	}
-	win.map.lenght--;
-	init_val(&win);
-	free_all(&win, win.map.elem);
 }
 
-int	main(int ac, char **av)
+void ft_start(int i, char **strs)
 {
+	t_window win;
+	int j;
+	win.map.wide = 0;
+	win.map.lenght = 0;
+
+	win.map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
+	j = 0;
+	i = 7;
+	while (strs[i][0] == '\n')
+		i++;
+	check_tab(strs);
+	while (strs[i])
+	{
+		if (ft_strlen(strs[i]) > win.map.lenght)
+			win.map.lenght = ft_strlen(strs[i]);
+		win.map.mapo[j] = ft_strdup(strs[i]);
+		j++;
+		i++;
+	}
+	i = 0;
+	while (win.map.mapo[i])
+		i++;
+	get_player_location(&win.player, win.map.mapo);
+	check_map(win.map.mapo);
+	//check_zero_surrond(win.map.mapo);
+	win.map.lenght--;
+	win.map.wide = i;
+
+	init_val(&win);
+	free_all(&win, strs);
+}
+
+int main(int ac, char **av)
+{
+	int fd;
+	char **strs;
+	int i;
+	t_textures t;
+	t_color floor;
+	t_color ceiling;
+
+	i = 0;
 	if (ac == 2)
-		ft_start(av[1]);
+	{
+		strs = (char **)ft_calloc(100, sizeof(char *));
+		fd = open(av[1], O_RDWR);
+		while (1)
+		{
+			strs[i] = get_next_line(fd);
+			if (!strs[i])
+				break;
+			i++;
+		}
+		i = check_textures(strs, &t, &floor, &ceiling);
+		ft_start(i, strs);
+	}
 	else
 		return (1);
 }
+

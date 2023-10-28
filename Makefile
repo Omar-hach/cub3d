@@ -16,7 +16,7 @@ CC = gcc
 
 HEADER = cub3d.h
 
-CFLAGS = -Werror -Wall -Wextra #-fsanitize=address
+CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
@@ -24,9 +24,9 @@ FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/li
 
 SRC = 	parsing/cub3d.c\
 		draw/ft_drawer.c\
-		draw/map_draw.c
-#parsing/check_textures.c
-#parsing/check_map.c
+		draw/map_draw.c\
+		parsing/check_textures.c\
+		parsing/check_map.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -37,7 +37,7 @@ all:$(NAME)
 $(NAME): $(OBJ) $(HEADER)
 	make -C libft
 	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-
+# -fsanitize=address -g
 clean:
 	make -C libft clean
 	rm -f $(OBJ)
