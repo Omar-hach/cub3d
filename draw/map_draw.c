@@ -101,14 +101,30 @@ t_point	player_drawer(t_window *win, t_point pos, double angle, int color)
 	return (pos);
 }
 
-t_segm	wall(double sx, double sy, double ex, double ey)
+t_segm	wall(t_cord cord, t_window *win, t_point step, int is_it_x)
 {
 	t_segm	wall;
 
-	wall.end.x = ex;
-	wall.end.y = ey;
-	wall.start.x = sx;
-	wall.start.y = sy;
+	if(is_it_x < 0)
+	{
+		wall.end = assign_point(win->map.lenght * 10, cord.j * 10 + 12);
+		wall.start = assign_point(10, cord.j * 10 + 12);
+		if(step.y > 0)
+		{
+			wall.end = assign_point(win->map.lenght * 10, cord.j * 10 + 2);
+			wall.start = assign_point(10, cord.j * 10 + 2);
+		}
+	}
+	else
+	{
+		wall.end = assign_point(cord.i * 10 + 12, win->map.wide * 10);
+		wall.start = assign_point(cord.i * 10 + 12, 10);
+		if(step.x > 0)
+		{
+			wall.end = assign_point(cord.i * 10 + 2, win->map.wide * 10);
+			wall.start = assign_point(cord.i * 10 + 2, 10);
+		}
+	}
 	return (wall);
 }
 
@@ -148,86 +164,18 @@ t_vector	assign_vect(double x, double y, t_point pos)
 	return(vec);
 }
 
-t_segm *find_wall()
-{
-	t_segm	*edge = NULL;
-	return(edge);
-}
-
-double	raycast(t_window *win, char **matrix, t_point *pos, t_vector v)
-{
-	int		i;
-	int		j;
-	t_point	step;
-	t_point	a;
-	t_point	unite;
-
-	i = (win->player.p.x - 2) / 10;
-	j = (win->player.p.y - 2) / 10;
-	step.x = (v.x >= 0) - (v.x < 0);
-	step.y = (v.y >= 0) - (v.y < 0);
-	a.x = (v.x < 0) * ((i * 10 + 12 - win->player.p.x) - (v.x >= 0) * (win->player.p.x - i * 10 - 2)) / 10;
-	a.y = (v.x < 0) * ((j * 10 + 12 - win->player.p.y) - (v.y >= 0) * (win->player.p.y - j * 10 - 2)) / 10;
-	unite.x = sqrt(1 + pow(v.y / v.x,2)) * a.x;
-	unite.y = sqrt(1 + pow(v.x / v.y,2)) * a.y ;
-	if((v.y > -0.0001 && v.y < 0.0001) || (v.x > -0.0001 && v.x < 0.0001))
-	{
-		unite = assign_point(a.x, a.y);
-		while (matrix[j][i] != '1')
-		{
-			if ((v.x < -0.0001 || v.x > 0.0001))
-			{
-				i += step.x;
-				unite.x += 1;
-			}
-			if ((v.y < -0.0001 || v.y > 0.0001))
-			{
-				j += step.y;
-				unite.x += 1;
-			}
-		}
-	}
-	else
-	{
-	//printf("================================ m = %f \n", s.x);
-	printf("u.y = %f u.x = %f m[%i][%i] step.x=%.3f y=%.3f\n", unite.y, unite.x, j, i, a.x, a.y);
-	while (matrix[j][i] != '1')
-	{
-		if (unite.x < unite.y)
-		{
-			i += step.x;
-			unite.x += sqrt(1 + pow(v.y / v.x,2));
-		}
-		else
-		{
-			j += step.y;
-			unite.y += sqrt(1 + pow(v.x / v.y,2));
-		}
-		printf("u.y = %f u.x = %f m[%i][%i]\n", unite.y, unite.x, j, i);
-	}
-	}
-	t_point	start;
-	t_point	end = assign_int_point(4, 4);
-	t_point r = assign_point(pos->x + 100 * v.x, pos->y + 100 * v.y);
-	draw_line(win, win->player.p, r);
-	start = assign_int_point(i * 10 + 5, j * 10 + 5);
-	cub_drawer(win->img, start, end, 0x09FFFFFF);
-	return((unite.x <= unite.y) * unite.y + (unite.x > unite.y) * unite.x);
-}
-/*
-t_point	raycast(t_window *win, char **matrix, t_point *pos, t_vector v)
+t_point	contact_p(t_window *win, t_segm edge, t_point *pos, t_vector v)
 {
 	t_point		r;
-	t_segm		edge;
 	double		t;
 	double		d;
 
 	d = 0;
 	t = 0;
+	printf("================================ start.x= %.0f start.y= %.0f end.x= %.0f end.y= %.0f\n", edge.start.x, edge.start.y,  edge.end.x, edge.end.y);
 	r = assign_point(win->map.lenght * 10 + 4 + pos->x, win->map.wide * 10 + 4 + pos->y);
 	if (!v.x && !v.y)
 		return (assign_point(0, 0));
-	edge = find_wall(win, matrix, v);
 	d = (edge.end.y - edge.start.y) * v.x - (edge.end.x - edge.start.x) * v.y;
 	d = ((pos->y - edge.start.y) * v.x - (pos->x - edge.start.x) * v.y) / d;
 	if (v.x)
@@ -236,11 +184,74 @@ t_point	raycast(t_window *win, char **matrix, t_point *pos, t_vector v)
 		t = ((1 - d) * edge.start.y + d * edge.end.y - pos->y) / v.y;
 	if (d >= 0 && d <= 1 && t >= 0 )
 		r = assign_point(pos->x + t * v.x, pos->y + t * v.y);
-	//draw_line(win, *pos, r);
+	draw_line(win, *pos, r);
 	return (r);
-}*/
+}
 
-// uwu
+double	raycast(t_window *win, char **matrix, t_vector v)
+{
+	t_cord	cord;
+	int		side;
+	t_point	step;
+	t_point	a;
+	t_point	dist;
+	t_point	unite;
+
+	cord.i = (win->player.p.x - 2) / 10;
+	cord.j = (win->player.p.y - 2) / 10;
+	step.x = (v.x >= 0) - (v.x < 0);
+	step.y = (v.y >= 0) - (v.y < 0);
+	if (v.x > 0)
+		a.x = (cord.i * 10 + 12 - win->player.p.x) / 10;
+	else
+		a.x = (win->player.p.x - cord.i * 10 - 2) / 10;
+	if (v.y > 0)
+		a.y = (cord.j * 10 + 12 - win->player.p.y) / 10;
+	else
+		a.y = (win->player.p.y - cord.j * 10 - 2)  / 10;
+	unite.x = fabs(a.x / v.x);
+	unite.y = fabs(a.y / v.y);
+	dist = assign_int_point(unite.x - fabs(1 / v.x), unite.y - fabs(1 / v.y));
+	printf("u.y = %f u.x = %f m[%i][%i] step.x=%.3f y=%.3f\n", unite.y, unite.x, cord.j, cord.i, a.x, a.y);
+	while (matrix[cord.j][cord.i] != '1')
+	{
+		if (unite.x < unite.y || v.y == 0)
+		{
+			cord.i += step.x;
+			unite.x += fabs(1 / v.x);
+			side = 1;
+		}
+		else
+		{
+			cord.j += step.y;
+			unite.y += fabs(1 / v.y);
+			side = -1;
+		}
+		printf("u.y = %f u.x = %f m[%i][%i]\n", unite.y, unite.x, cord.j, cord.i);
+	}
+	/*t_point	start;
+	t_point	end = assign_int_point(4, 4);
+	t_point r = assign_point(win->player.p.x + 100 * v.x, win->player.p.y + 100 * v.y);
+	draw_line(win, win->player.p, r);
+	start = assign_int_point(i * 10 + 5, j * 10 + 5);
+	cub_drawer(win->img, start, end, 0x09FFFFFF);*/
+	t_segm edge = wall(cord, win, step, side);
+	step = contact_p(win, edge, &win->player.p, v);
+	if(side > 0)
+		return(dist.x);
+	else
+		return(dist.y);
+
+}
+
+t_vector	add_vect(t_vector v1, t_vector v2)
+{
+	t_vector new_v;
+
+	new_v.x = v1.x + v2.x;
+	new_v.y = v1.y + v2.y;
+	return(new_v);
+}
 
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point *pos, t_vector v)
 {
@@ -248,12 +259,13 @@ t_vector	ft_draw_map(t_window *win, char **matrix, t_point *pos, t_vector v)
 	int			j;
 	t_point		start;
 	t_point		end;
-	//t_vector	uv;
+	t_vector	nv;
+	t_vector	add_v;
 
 	i = -1;
 	j = -1;
 	start = assign_int_point(0, 0);
-	end = assign_int_point(win->map.wide * 10 + 50, win->map.lenght * 10 + 4);
+	end = assign_int_point(win->map.wide * 10 + 4, win->map.lenght * 10 + 4);
 	cub_drawer(win->img, start, end, 0x909090FF);
 	end = assign_int_point(10, 10);
 	while (++i < win->map.wide)
@@ -269,16 +281,27 @@ t_vector	ft_draw_map(t_window *win, char **matrix, t_point *pos, t_vector v)
 				cub_drawer(win->img, start, end, 0xB8A649FF);
 		}
 	}
-	//if (check_inside(win, pos))
+	if (check_inside(win, pos))
 		win->player.p = player_drawer(win, *pos, win->player.angle, 0xFF322BFF);
-	//else
-	//	win->player.p = player_drawer(win, win->player.p, win->player.angle, 0xFF322BFF);
+	else
+		win->player.p = player_drawer(win, win->player.p, win->player.angle, 0xFF322BFF);
 	//ft_printf("ok %d\n", check_inside(win, pos));
+	double f;
 	if (check_inside(win, pos))
 	{
 		//lv = rotation_vect(lv, angle_adjast(win->player.angle, '*') + M_PI / 10);
 		//raycast(win, win->edge, pos, lv);
-		raycast(win, matrix, pos, v);
+		printf("distance=%f\n",raycast(win, matrix, v));
+		f = -0.1 * 0.25;
+		while (f < 0.11 * 0.25)
+		{
+			add_v.x = -v.y;
+			add_v.y = v.x + f;
+			nv = add_vect(add_v, v);
+			printf("================================ nv.x= %f nv.y= %f\n", nv.x, nv.y);
+			//raycast(win, matrix, nv);
+			f += 0.01 * 0.25; 
+		}
 		//printf("ux=%.2f,.,uy=%.2f",uv.x, uv.y);
 		//printf("lx=%.2f,.,ly=%.2f\n",uv.x, uv.y);
 		/*i = 0;

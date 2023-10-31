@@ -80,6 +80,7 @@ void ft_rgb(char *str, t_color *color)
 		exit(2);
 	}
 }
+
 void	check_textures_rgb(t_textures *t)
 {
 	int	i;
@@ -106,6 +107,7 @@ void	check_textures_rgb(t_textures *t)
 		i++;
 	}
 }
+
 int check_textures(char **strs, t_textures *t, t_color *floor, t_color *ceiling)
 {
 	int i;

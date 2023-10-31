@@ -112,11 +112,11 @@ void	init_val(t_window	*win)
 			win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
 	if (!win->img)
 		error();
+	//win->player.angle = M_PI / 2;
 	v.x = 1;
 	v.y = 0;
 	v = rotation_vect(v, angle_adjast(win->player.angle, '*'));
 	//win->player.p = assign_point(60 + 5, 22 + 5);
-	win->player.angle = 0;
 	printf("|x=%d,y=%d\n", win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
 	ft_draw_map(win, win->map.mapo, &win->player.p, v);
 	mlx_loop_hook(win->mlx_ptr, &keyhook, win);

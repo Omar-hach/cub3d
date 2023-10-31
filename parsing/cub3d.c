@@ -61,8 +61,8 @@ void get_player_location(t_player *player, char **mapo)
 			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
 			{
 				get_angle(mapo[i][j], player);
-				player->p.y = i * 10 + 5;
-				player->p.x = j * 10 + 5;
+				player->p.y = i * 10 + 2;
+				player->p.x = j * 10 + 2;
 			}
 			j++;
 		}

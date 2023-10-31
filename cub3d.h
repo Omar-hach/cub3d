@@ -54,6 +54,18 @@ typedef struct s_point
 	double	y;
 }t_point;
 
+typedef struct s_cord
+{
+	int	i;
+	int	j;
+}t_cord;
+
+typedef struct s_contact
+{
+	t_point	r;
+	double	distance;
+}t_contact;
+
 typedef struct s_segm
 {
 	t_point	start;
@@ -79,8 +91,6 @@ typedef struct s_window
 	void		*win_ptr;
 	int			walls_num;
 	t_player	player;
-	t_segm		*edge;
-	t_point		*rays;
 	mlx_image_t	*mini_map;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
@@ -98,7 +108,7 @@ double		angle_adjast(double angle, char sign);
 void		init_val(t_window *win);
 
 int			check_inside(t_window *win, t_point *player);
-t_segm		wall(double sx, double sy, double ex, double ey);
+t_segm		wall(t_cord cord, t_window *win, t_point step, int is_it_x);
 void		ft_draw_scene(t_window *win, t_point *pos, t_vector lv);
 t_vector	rotation_vect(t_vector vect, double deg);
 
