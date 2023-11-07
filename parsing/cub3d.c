@@ -36,6 +36,8 @@ void free_all(t_window *win, char **elem)
 	free(elem);
 	mlx_delete_image(win->mlx_ptr, win->img);
 	mlx_terminate(win->mlx_ptr);
+	free(win->player);
+	free(win);
 }
 
 void get_angle(char c, t_player *player)
@@ -49,6 +51,7 @@ void get_angle(char c, t_player *player)
 	else if (c == 'S')
 		player->angle = M_PI_2 * 3;
 }
+
 void get_player_location(t_player *player, char **mapo)
 {
 	int i = 0;
@@ -61,6 +64,7 @@ void get_player_location(t_player *player, char **mapo)
 			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
 			{
 				get_angle(mapo[i][j], player);
+				//printf("distance=%p\n", player);
 				player->p.y = i * 10 + 2;
 				player->p.x = j * 10 + 2;
 			}
@@ -72,12 +76,14 @@ void get_player_location(t_player *player, char **mapo)
 
 void ft_start(int i, char **strs)
 {
-	t_window win;
+	t_window *win;
 	int j;
-	win.map.wide = 0;
-	win.map.lenght = 0;
+	win = (t_window *)ft_calloc(1, sizeof(t_window));
+	win->player = (t_player *)ft_calloc(1, sizeof(t_player));
+	win->map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
+	win->map.wide = 0;
+	win->map.lenght = 0;
 
-	win.map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
 	j = 0;
 	i = 7;
 	while (strs[i][0] == '\n')
@@ -85,23 +91,24 @@ void ft_start(int i, char **strs)
 	check_tab(strs);
 	while (strs[i])
 	{
-		if (ft_strlen(strs[i]) > win.map.lenght)
-			win.map.lenght = ft_strlen(strs[i]);
-		win.map.mapo[j] = ft_strdup(strs[i]);
+		if (ft_strlen(strs[i]) > win->map.lenght)
+			win->map.lenght = ft_strlen(strs[i]);
+		win->map.mapo[j] = ft_strdup(strs[i]);
 		j++;
 		i++;
 	}
 	i = 0;
-	while (win.map.mapo[i])
+	while (win->map.mapo[i])
 		i++;
-	get_player_location(&win.player, win.map.mapo);
-	check_map(win.map.mapo);
+	get_player_location(win->player, win->map.mapo);
+	//printf("p[%p].x=%.0f,p.y=%.0f\n",win->player->p, (win->player->p->x - 2) / 10, (win->player->p->y - 2) / 10);
+	check_map(win->map.mapo);
 	//check_zero_surrond(win.map.mapo);
-	win.map.lenght--;
-	win.map.wide = i;
+	win->map.lenght--;
+	win->map.wide = i;
 
-	init_val(&win);
-	free_all(&win, strs);
+	init_val(win);
+	free_all(win, strs);
 }
 
 int main(int ac, char **av)

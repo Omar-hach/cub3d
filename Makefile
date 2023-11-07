@@ -25,6 +25,7 @@ FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/li
 SRC = 	parsing/cub3d.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c\
+		draw/init_tools.c\
 		parsing/check_textures.c\
 		parsing/check_map.c
 

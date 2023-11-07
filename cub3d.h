@@ -74,9 +74,17 @@ typedef struct s_segm
 
 typedef struct s_player
 {
-	t_point	p;
-	double	angle;
+	t_point		p;
+	double		angle;
+	t_vector	v;
 }t_player;
+
+typedef struct s_ray
+{
+	t_point		p;
+	double		distance;
+	char		side;
+}t_ray;
 
 typedef struct s_map
 {
@@ -90,24 +98,29 @@ typedef struct s_window
 {
 	void		*win_ptr;
 	int			walls_num;
-	t_player	player;
+	t_player	*player;
 	mlx_image_t	*mini_map;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
 	t_map		map;
+	t_color		*floor;
+	t_color		*ceiling;
+	mlx_texture_t		*texture;
 }t_window;
 
 void		ft_start_map(char *map);
 void		draw_line(t_window *win, t_point start, t_point end);
 void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
-t_point		player_drawer(t_window *win, t_point pos, double angle, int color);
-t_vector	ft_draw_map(t_window *win, char **matrix, t_point *pos, t_vector v);
+void		player_drawer(t_window *win, t_point pos, int color);
+t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos, t_vector v);
 t_point		assign_point(double x, double y);
 t_point		assign_int_point(int x, int y);
 double		angle_adjast(double angle, char sign);
 void		init_val(t_window *win);
+t_vector	assign_vect(double x, double y, t_point pos);
+t_point		pos_adjast(t_window *win, t_point pos);
 
-int			check_inside(t_window *win, t_point *player);
+int			check_inside(t_window *win, t_point player);
 t_segm		wall(t_cord cord, t_window *win, t_point step, int is_it_x);
 void		ft_draw_scene(t_window *win, t_point *pos, t_vector lv);
 t_vector	rotation_vect(t_vector vect, double deg);
