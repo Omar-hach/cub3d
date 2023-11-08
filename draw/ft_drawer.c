@@ -48,16 +48,16 @@ t_point	mov_player(t_point player, t_vector v, mlx_t *mlxp)
 
 	//printf("[%.4f][%.4f]\n", v.x, v.y);
 	next_pos = player;
-	if (mlx_is_key_down(mlxp, MLX_KEY_W))
+	if (mlx_is_key_down(mlxp, MLX_KEY_D))
 		next_pos = assign_point(next_pos.x + v.x,
 				next_pos.y + v.y);
-	if (mlx_is_key_down(mlxp, MLX_KEY_S))
+	if (mlx_is_key_down(mlxp, MLX_KEY_A))
 		next_pos = assign_point(next_pos.x - v.x,
 				next_pos.y - v.y);
-	if (mlx_is_key_down(mlxp, MLX_KEY_D))
+	if (mlx_is_key_down(mlxp, MLX_KEY_W))
 		next_pos = assign_point(next_pos.x + v.y,
 				next_pos.y - v.x);
-	if (mlx_is_key_down(mlxp, MLX_KEY_A))
+	if (mlx_is_key_down(mlxp, MLX_KEY_S))
 		next_pos = assign_point(next_pos.x - v.y,
 				next_pos.y + v.x);
 	printf("next_pos==[%.4f][%.4f]\n", next_pos.x, next_pos.y);

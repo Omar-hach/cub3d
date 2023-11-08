@@ -12,29 +12,66 @@
 
 #include "../cub3d.h"
 
-void texture_to_img(mlx_texture_t* texture, mlx_image_t *img, t_window *win)
+void texture_to_img(t_window *win, t_point p, t_cord cord, t_ray r)
 {
-	uint32_t 		y;
-	uint32_t 		x;
+	 uint32_t	y;
+	uint32_t	x;
+	int	yi;
+	int	xi;
 	uint8_t*	pixelx;
 	uint8_t*	pixeli;
+	double		step;
+	double		texPos;
 
-	(void)(win);
-	y = -1;
-	x = 0;
-	while (++y < texture->height)
+	 y = 0;
+	step = win->texture->height / ((win->map.wide * 50 + 20) / r.distance * 10);
+	 texPos = (cord.j - ((win->map.wide * 50 + 20) + (win->map.wide * 50 + 20)/ r.distance * 10) / 2) * step;
+	texPos = 0;
+	x = p.x;
+	xi = cord.i;
+	yi = cord.j;
+	printf("img %d, %d\n", cord.i, cord.j);
+	// if(xi >= (unsigned int)(win->map.lenght * 50 + 20) / 2)
+	// 	pause();
+	while (yi < ((win->map.wide * 50 + 20) + (win->map.wide * 50 + 20) / r.distance * 10 ) / 2)
 	{
-		x = -1;
-		while (++x < texture->width)
+		 y += p.y;
+		texPos += step;
+		//printf("tex %d, %f\n", x, texPos);
+		// if (((texPos * win->texture->width) + x) < (unsigned int) (win->map.wide * 50 * win->map.lenght * 50)
+		if (((int) yi <  win->map.wide * 50 + 20 && yi > 0))
 		{
-			if (((y * texture->width) + x) < (unsigned int) (win->map.wide * 50 * win->map.lenght * 50))
-			{
-				pixelx = &texture->pixels[((y * texture->width) + x) * texture->bytes_per_pixel];
-				pixeli = &img->pixels[((y * img->width) + x) * texture->bytes_per_pixel];
-				ft_memmove(pixeli, pixelx, texture->bytes_per_pixel);
-			}
+			mlx_put_pixel(win->mini_map, xi, yi, 0x5091903F);
+			pixelx = &win->texture->pixels[(((int)texPos * win->texture->width) + x) * win->texture->bytes_per_pixel];
+			pixeli = &win->mini_map->pixels[((yi * win->mini_map->width) + xi) * win->texture->bytes_per_pixel];
+			ft_memmove(pixeli, pixelx, win->texture->bytes_per_pixel);
 		}
+		yi++;
 	}
+}
+
+void	texturess(t_window *win, t_ray r, t_cord cord)
+{
+	t_point	cube;
+	t_point	p;
+	double	Wall_hight;
+
+	cube.x = fmod(r.p.x - 2, 10) / 10;
+	cube.y = fmod(r.p.y - 2, 10) / 10;
+	Wall_hight = (win->map.wide * 50 + 20)/ r.distance * 10;
+	if(r.side == 'w' || r.side == 'e')
+	{
+		p.x = cube.x * win->texture->width;
+		p.y = (Wall_hight) * win->texture->height;
+		texture_to_img(win, p, cord, r);
+	}
+	else if(r.side == 'n' || r.side == 's')
+	{
+		p.x = cube.y * win->texture->width;
+		p.y = (Wall_hight) * win->texture->height;
+		texture_to_img(win, p, cord, r);
+	}
+
 }
 
 void	draw_line(t_window *win, t_point start, t_point end)
@@ -168,7 +205,7 @@ t_point	contact_p(t_window *win, t_segm edge, t_point pos, t_vector v)
 		t = ((1 - d) * edge.start.y + d * edge.end.y - pos.y) / v.y;
 	if (d >= 0 && d <= 1 && t >= 0)
 		r = assign_point(pos.x + t * v.x, pos.y + t * v.y);
-	draw_line(win, pos, r);
+	//draw_line(win, pos, r);
 	return (r);
 }
 
@@ -180,6 +217,7 @@ t_ray	raycast(t_window *win, char **matrix, t_vector v)
 	t_point	step;
 	t_point	a;
 	t_point	dist;
+
 	t_point	unite;
 
 	cord.i = (win->player->p.x - 2) / 10;
@@ -253,8 +291,7 @@ t_vector	add_vect(t_vector v1, t_vector v2)
 
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos, t_vector v)
 {
-	int		i;
-	int		j;
+	t_cord	cord;
 	t_point	start;
 	t_point	end;
 
@@ -276,11 +313,11 @@ t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos, t_vector v)
 		//lv = rotation_vect(lv, angle_adjast(win->player.angle, '*') + M_PI / 10);
 		win->player->p = assign_point(next_pos.x, next_pos.y);
 		plane = -1;
-		i = -1;
-		while (++i < win->map.lenght * 50 + 20)
+		cord.i = -1;
+		while (++cord.i < win->map.lenght * 50 + 20)
 		{
 			//printf("%p\n",win->texture);
-			plane = (2 * (double)i / 20 - 1) * M_PI / (double)180;
+			plane = (2 * (double)cord.i / 20 - 1) * M_PI / (double)180;
 			add_v.y = 0;
 			add_v.x = 1;
 			nv = rotation_vect(add_v, angle_adjast(win->player->angle + plane, '*'));
@@ -289,39 +326,38 @@ t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos, t_vector v)
 			//r.distance = sqrt(pow(r.p.x - win->player->p.x, 2) + pow(r.p.y - win->player->p.y, 2)) * cos(angle_adjast(win->player->angle - plane, '*'));
 			r.distance = sqrt(pow(r.p.x - win->player->p.x, 2) + pow(r.p.y - win->player->p.y, 2));
 			//printf("disctance==[%.4f][]\n", plane);
-			j = ((win->map.wide * 50 + 20) - (win->map.wide * 50 + 20)/ r.distance * 10) / 2;
-			while (++j < ((win->map.wide * 50 + 20) + (win->map.wide * 50 + 20) / r.distance * 10 ) / 2)
-			{
-				if (j < win->map.wide * 50 + 20 && j > 0)
-					mlx_put_pixel(win->mini_map, i, j, 0x5091903F);
-				texture_to_img(win->texture, win->mini_map, win);
-			}
+			cord.j = ((win->map.wide * 50 + 20) - (win->map.wide * 50 + 20)/ r.distance * 10) / 2 - 1; // 10 is the gthe size of the cub
+			texturess(win, r, cord);
+			//while (++cord.j < ((win->map.wide * 50 + 20) + (win->map.wide * 50 + 20) / r.distance * 10 ) / 2)
+				// if (cord.j < win->map.wide * 50 + 20 && cord.j > 0)
+				// 	mlx_put_pixel(win->mini_map, cord.i, cord.j, 0x5091903F);
 			// sigfault in next_pos==[247.4636][44.6134] v.x=0.013084, v.y=0.249657 angle=4.76
 		}
 	}
 
 	
 	
-	i = -1;
-	j = -1;
+	cord.i = -1;
+	cord.j = -1;
 	start = assign_int_point(0, 0);
 	end = assign_int_point(win->map.wide * 10 + 4, win->map.lenght * 10 + 4);
 	cub_drawer(win->mini_map, start, end, 0x909090FF);
 	end = assign_int_point(10, 10);
-	while (++i < win->map.wide)
+	while (++cord.i < win->map.wide)
 	{
-		j = -1;
-		while (++j < win->map.lenght)
+		cord.j = -1;
+		while (++cord.j < win->map.lenght)
 		{
-			start = assign_int_point(j * 10 + 2, i * 10 + 2);
-			if (matrix[i][j] == '1')
+			start = assign_int_point(cord.j * 10 + 2, cord.i * 10 + 2);
+			if (matrix[cord.i][cord.j] == '1')
 				cub_drawer(win->mini_map, start, end, 0x09005EFF);
-			else if ((matrix[i][j] != ' ' && matrix[i][j] != '\n')
-				|| !matrix[i][j])
+			else if ((matrix[cord.i][cord.j] != ' ' && matrix[cord.i][cord.j] != '\n')
+				|| !matrix[cord.i][cord.j])
 				cub_drawer(win->mini_map, start, end, 0xB8A649FF);
 		}
 	}
 	player_drawer(win, win->player->p, 0xFF322BFF);
+	r = raycast(win, matrix, v);
 	draw_line(win, win->player->p, r.p);
 	return (v);
 
