@@ -22,16 +22,12 @@ void	texture_to_img(t_window *win, t_point mesure, mlx_texture_t *txt,
 
 	step = txt->height / mesure.y;
 	tex_pos = 0;
-	//printf("texture[h.y=%d][w.x=%d]*wall_hight[%f]=p %f\n", txt->width, txt->height, mesure.y, mesure.x);
-	//printf("step= %f * loop %f = %f\n", step, (win->screen.y + mesure.y) / 2 - cord.y, step * ((win->screen.y + mesure.y) / 2 - cord.y));
 	while (cord.y < (win->screen.y + mesure.y) / 2)
 	{
 		tex_pos += step;
-		//printf("cord.y=%d  cord.x=%d  text_pos=%f p.x=%d\n", cord.y, cord.x, tex_pos, win->screen.y);
-		//if (tex_pos > 257)
-		//	pause();
-		if (((int) cord.y < win->screen.y && cord.y > 0)
-		&& (((int)tex_pos * txt->width) + (int)mesure.x) < txt->height * txt->width)
+		if ((int) cord.y < win->screen.y && cord.y > 0
+			&& ((int)tex_pos * txt->width + (int)mesure.x) < txt->height
+			* txt->width)
 		{
 			pixelx = &txt->pixels[(((int)tex_pos * txt->width)
 					+ (int)mesure.x) * txt->bytes_per_pixel];

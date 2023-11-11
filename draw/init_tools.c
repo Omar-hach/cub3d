@@ -43,12 +43,13 @@ double	angle_adjast(double angle, char sign)
 	return (angle);
 }
 
-t_vector	assign_vect(double x, double y, t_point pos)
+t_vector	assign_vect(double vx, double vy, double angle)
 {
 	t_vector	vec;
 
-	vec.x = x - pos.x;
-	vec.y = y - pos.y;
+	vec.x = vx;
+	vec.y = vy;
+	vec = rotation_vect(vec, angle_adjast(angle, '*'));
 	return (vec);
 }
 

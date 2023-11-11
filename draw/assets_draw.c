@@ -87,31 +87,3 @@ void	draw_background(t_window *win, int floor, int ceiling)
 	end = assign_int_point(win->map.wide * 25 + 11, win->map.lenght * 50 + 21);
 	cub_drawer(win->img, start, end, ceiling);
 }
-
-void	draw_mini_map(t_window *win, char **matrix)
-{
-	t_cord	cord;
-	t_point	start;
-	t_point	end;
-
-	cord.x = -1;
-	cord.y = -1;
-	start = assign_int_point(0, 0);
-	end = assign_int_point(win->map.wide * 10 + 4, win->map.lenght * 10 + 4);
-	cub_drawer(win->img, start, end, 0x909090FF);
-	end = assign_int_point(10, 10);
-	while (++cord.x < win->map.wide)
-	{
-		cord.y = -1;
-		while (++cord.y < win->map.lenght)
-		{
-			start = assign_int_point(cord.y * 10 + 2, cord.x * 10 + 2);
-			if (matrix[cord.x][cord.y] == '1')
-				cub_drawer(win->img, start, end, 0x09005EFF);
-			else if ((matrix[cord.x][cord.y] != ' '
-				&& matrix[cord.x][cord.y] != '\n') || !matrix[cord.x][cord.y])
-				cub_drawer(win->img, start, end, 0xB8A649FF);
-		}
-	}
-	player_drawer(win, win->player->p, 0xFF322BFF);
-}

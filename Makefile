@@ -12,6 +12,8 @@
 
 NAME = cub3D
 
+NAME_bonus = cub3D_bonus
+
 CC = gcc
 
 HEADER = cub3d.h
@@ -28,10 +30,22 @@ SRC = 	parsing/cub3d.c\
 		draw/init_tools.c\
 		parsing/check_map.c\
 		draw/assets_draw.c\
-		draw/put_textures.c
+		draw/put_textures.c\
+		draw/raycasting.c
+
+SRC_bonus = bonus/cub3D_bonus.c\
+			draw/ft_drawer.c\
+			draw/map_draw.c\
+			draw/init_tools.c\
+			parsing/check_map.c\
+			draw/assets_draw.c\
+			draw/put_textures.c\
+			draw/raycasting.c
 
 # parsing/check_textures.c
 OBJ = $(SRC:.c=.o)
+
+OBJ_bonus = $(SRC_bonus:.c=.o)
 
 LIBFT = libft/libft.a MLX42/libmlx42.a -I$() -lglfw
 
@@ -40,16 +54,22 @@ all:$(NAME)
 $(NAME): $(OBJ) $(HEADER)
 	make -C libft
 	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-# 
+
+bonus: $(NAME_bonus) 
+
+$(NAME_bonus):$(OBJ) $(OBJ_bonus) $(HEADER)
+	make -C ./libft
+	$(CC) $(FLAGS) $(LIBFT) $(OBJ_bonus) -o $(NAME_bonus)
+ 
 clean:
 	make -C libft clean
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJ_bonus)
 
 fclean: clean
 	make -C libft fclean
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAME_bonus)
 
 re: fclean all
 	make -C libft re
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
