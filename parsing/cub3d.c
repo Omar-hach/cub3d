@@ -38,18 +38,7 @@ void free_all(t_window *win, char **elem)
 	mlx_terminate(win->mlx_ptr);
 	free(win->player);
 	free(win);
-}
-
-void get_angle(char c, t_player *player)
-{
-	if (c == 'E')
-		player->angle = 0;
-	else if (c == 'N')
-		player->angle = M_PI_2;
-	else if (c == 'W')
-		player->angle = M_PI;
-	else if (c == 'S')
-		player->angle = M_PI_2 * 3;
+	//system("leaks $(ps | grep cub3D | awk '{if (NR==1) print$1}')");
 }
 
 void get_player_location(t_player *player, char **mapo)
@@ -63,8 +52,13 @@ void get_player_location(t_player *player, char **mapo)
 		{
 			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
 			{
-				get_angle(mapo[i][j], player);
-				//printf("distance=%p\n", player);
+				player->angle = 0;
+				if (mapo[i][j] == 'N')
+					player->angle = M_PI_2;
+				else if (mapo[i][j] == 'W')
+					player->angle = M_PI;
+				else if (mapo[i][j] == 'S')
+					player->angle = M_PI_2 * 3;
 				player->p.y = i * 10 + 2;
 				player->p.x = j * 10 + 2;
 			}
@@ -101,7 +95,6 @@ void ft_start(int i, char **strs)
 	while (win->map.mapo[i])
 		i++;
 	get_player_location(win->player, win->map.mapo);
-	//printf("p[%p].x=%.0f,p.y=%.0f\n",win->player->p, (win->player->p->x - 2) / 10, (win->player->p->y - 2) / 10);
 	check_map(win->map.mapo);
 	//check_zero_surrond(win.map.mapo);
 	win->map.lenght--;
@@ -113,12 +106,9 @@ void ft_start(int i, char **strs)
 
 int main(int ac, char **av)
 {
-	int fd;
-	char **strs;
-	int i;
-	t_textures t;
-	t_color floor;
-	t_color ceiling;
+	int		fd;
+	char	**strs;
+	int		i;
 
 	i = 0;
 	if (ac == 2)
@@ -132,7 +122,7 @@ int main(int ac, char **av)
 				break;
 			i++;
 		}
-		i = check_textures(strs, &t, &floor, &ceiling);
+		//i = check_textures(strs, &t, &floor, &ceiling);
 		ft_start(i, strs);
 	}
 	else

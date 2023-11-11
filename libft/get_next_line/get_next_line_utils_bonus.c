@@ -9,7 +9,7 @@
 /*   Updated: 2022/12/04 19:39:34 by ohachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include"get_next_line_bonus.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strchr2(const char *str, int c)
 {

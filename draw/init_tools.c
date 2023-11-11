@@ -33,7 +33,7 @@ t_point	assign_int_point(int x, int y)
 double	angle_adjast(double angle, char sign)
 {
 	if (angle <= 0)
-		angle = M_PI * 2;
+		angle += M_PI * 2;
 	if (sign == '-')
 		angle -= M_PI / 180;
 	if (sign == '+')
@@ -54,7 +54,6 @@ t_vector	assign_vect(double x, double y, t_point pos)
 
 t_point	pos_adjast(t_window *win, t_point pos)
 {
-	
 	if (pos.x < 5)
 		pos.x = win->map.lenght * 10;
 	else if (pos.x > win->map.lenght * 10)

@@ -20,15 +20,17 @@ CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
-FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" -fsanitize=address -g
 
 SRC = 	parsing/cub3d.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c\
 		draw/init_tools.c\
-		parsing/check_textures.c\
-		parsing/check_map.c
+		parsing/check_map.c\
+		draw/assets_draw.c\
+		draw/put_textures.c
 
+# parsing/check_textures.c
 OBJ = $(SRC:.c=.o)
 
 LIBFT = libft/libft.a MLX42/libmlx42.a -I$() -lglfw
@@ -38,7 +40,7 @@ all:$(NAME)
 $(NAME): $(OBJ) $(HEADER)
 	make -C libft
 	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
-# -fsanitize=address -g
+# 
 clean:
 	make -C libft clean
 	rm -f $(OBJ)
