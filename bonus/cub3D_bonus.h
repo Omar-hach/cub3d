@@ -79,11 +79,22 @@ typedef struct s_ray
 
 typedef struct s_map
 {
-	int		lenght; // the x len of the map
-	int		wide; // the y len of the map
-	char	**elem; // all the file is here
-	char	**mapo; // put the map here
-}t_map;
+    char *split_line;
+    char *map_line;
+    char **full_file;
+    t_player *player;
+    char **mapo;
+    char *so;
+    char *we;
+    char *ea;
+    char *no;
+    char *c;
+    char *f;
+	int wide;
+	int len;
+    int error_find;
+    int map_start;
+} t_map;
 
 
 
@@ -94,7 +105,7 @@ typedef struct s_window
 	mlx_image_t	*mini_map;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
-	t_map		map;
+	t_map		*map;
 	t_texture	t; // put texture and floor && celein colore here
 	t_cord		*screen; // those are fix
 }t_window;
@@ -140,6 +151,16 @@ void		check_map(char **strs);
 void		error(void);
 void		free_all(t_window *win, char **elem);
 void		get_player_location(t_player *player, char **mapo);
+
+//parse
+
+void 		get_player_location(t_player *player, t_map *g);
+int        check_borders_col(t_map *g);
+int        check_borders_line(t_map *g);
+int 		get_text(t_map *g);
+int 		play_char(char c, int *a);
+int 		check_map_line(char **str);
+void 		ft_start(t_map *g);
 
 #endif
 

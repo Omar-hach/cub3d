@@ -18,21 +18,21 @@ t_segm	wall(t_cord cord, t_window *win, t_vector v, int is_it_x)
 
 	if (is_it_x < 0)
 	{
-		wall.end = assign_point(win->map.lenght * 10, cord.y * 10 + 12);
+		wall.end = assign_point(win->map->len * 10, cord.y * 10 + 12);
 		wall.start = assign_point(10, cord.y * 10 + 12);
 		if (v.y >= 0)
 		{
-			wall.end = assign_point(win->map.lenght * 10, cord.y * 10 + 2);
+			wall.end = assign_point(win->map->len * 10, cord.y * 10 + 2);
 			wall.start = assign_point(10, cord.y * 10 + 2);
 		}
 	}
 	else
 	{
-		wall.end = assign_point(cord.x * 10 + 12, win->map.wide * 10);
+		wall.end = assign_point(cord.x * 10 + 12, win->map->wide * 10);
 		wall.start = assign_point(cord.x * 10 + 12, 10);
 		if (v.x >= 0)
 		{
-			wall.end = assign_point(cord.x * 10 + 2, win->map.wide * 10);
+			wall.end = assign_point(cord.x * 10 + 2, win->map->wide * 10);
 			wall.start = assign_point(cord.x * 10 + 2, 10);
 		}
 	}
@@ -47,8 +47,8 @@ t_point	contact_p(t_window *win, t_segm edge, t_point pos, t_vector v)
 
 	d = 0;
 	t = 0;
-	rp = assign_point(win->map.lenght * 10 + 4 + pos.x,
-			win->map.wide * 10 + 4 + pos.y);
+	rp = assign_point(win->map->len * 10 + 4 + pos.x,
+			win->map->wide * 10 + 4 + pos.y);
 	if (!v.x && !v.y)
 		return (assign_point(0, 0));
 	d = (edge.end.y - edge.start.y) * v.x - (edge.end.x - edge.start.x) * v.y;
@@ -91,8 +91,8 @@ t_ray	raycast(t_window *win, int side, t_point pos, t_vector v)
 	cord = assign_cord((pos.x - 2) / 10, (pos.y - 2) / 10);
 	cubepos = in_cube_pos(win, cord, v);
 	unite = assign_point(fabs(cubepos.x / v.x), fabs(cubepos.y / v.y));
-	while (cord.y < win->map.wide && cord.y >= 0 && cord.x < win->map.lenght
-		&& cord.x >= 0 && win->map.mapo[cord.y][cord.x] != '1')
+	while (cord.y < win->map->wide && cord.y >= 0 && cord.x < win->map->len
+		&& cord.x >= 0 && win->map->mapo[cord.y][cord.x] != '1')///win->map->wide * 10
 	{
 		if (unite.x < unite.y || (v.y < 0.00001 && v.y > -0.00001))
 		{

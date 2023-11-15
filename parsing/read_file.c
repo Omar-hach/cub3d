@@ -122,13 +122,14 @@ void get_len_wide(t_map *g)
         while (g->mapo[j][i])
             i++;
         if (i > g->wide)
-            g->wide = i;
+            g->len = i;
         j++;
     }
-    g->len = j;
+    g->wide = j;
 }
 void parser(t_map *g, int fd)
 {
+    g->player = ft_calloc(1, sizeof(t_player));
     get_data(fd, g);
     get_map(fd, g);
     g->mapo = convert_map(g->map_line);
@@ -152,10 +153,7 @@ void parser(t_map *g, int fd)
     printf("----------------\t\n");
     while(g->mapo[i])
         printf("%s\n", g->mapo[i++]);
-    
-
-    
-    //ft_start(g);
+    ft_start(g);
 }
 
 
@@ -168,7 +166,7 @@ int main(int ac, char **av)
     {
         fd = open(av[1], O_RDONLY);
         g = ft_calloc(1, sizeof(t_map));
-        //parser(g, fd);
+        parser(g, fd);
     }
     else
     {

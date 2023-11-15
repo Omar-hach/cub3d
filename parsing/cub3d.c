@@ -73,10 +73,20 @@ void ft_start(t_map *g)
 	t_window *win;
 	// int j;
 	win = (t_window *)ft_calloc(1, sizeof(t_window));
+	win->screen = (t_cord *)ft_calloc(1, sizeof(t_cord));
+
+	win->screen->x = 1280;
+	win->screen->y = 720;
+	printf("win.x=%d,y=%d\n", win->screen->x, win->screen->y);
 	win->player = g->player;
 	win->map = g;
 	win->map->wide = g->wide;
 	win->map->len = g->len;
+	win->t.ea = mlx_load_png(g->ea);
+	win->t.so = mlx_load_png(g->so);
+	win->t.no = mlx_load_png(g->no);
+	win->t.we = mlx_load_png(g->we);
+	printf("win.x=%d\n", g->len);
 	//check_zero_surrond(win.map.mapo);
 	// win->map.lenght--;
 	// win->map.wide = i;

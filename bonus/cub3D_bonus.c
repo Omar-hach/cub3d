@@ -59,9 +59,9 @@ void	ft_start_b(int i, char **strs)
 	win = (t_window *)ft_calloc(1, sizeof(t_window));
 	win->player = (t_player *)ft_calloc(1, sizeof(t_player));
 	win->screen = (t_cord *)ft_calloc(1, sizeof(t_cord));
-	win->map.mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
-	win->map.wide = 0;
-	win->map.lenght = 0;
+	win->map->mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
+	win->map->wide = 0;
+	win->map->len = 0;
 	j = 0;
 	i = 7;
 	while (strs[i][0] == '\n')
@@ -69,20 +69,20 @@ void	ft_start_b(int i, char **strs)
 	check_tab(strs);
 	while (strs[i])
 	{
-		if (ft_strlen(strs[i]) > win->map.lenght)
-			win->map.lenght = ft_strlen(strs[i]);
-		win->map.mapo[j] = ft_strdup(strs[i]);
+		if (ft_strlen(strs[i]) > win->map->len)
+			win->map->len = ft_strlen(strs[i]);
+		win->map->mapo[j] = ft_strdup(strs[i]);
 		j++;
 		i++;
 	}
 	i = 0;
-	while (win->map.mapo[i])
+	while (win->map->mapo[i])
 		i++;
-	get_player_location(win->player, win->map.mapo);
-	check_map(win->map.mapo);
+	get_player_location(win->player, win->map->mapo);
+	check_map(win->map->mapo);
 	//check_zero_surrond(win.map.mapo);
-	win->map.lenght--;
-	win->map.wide = i;
+	win->map->lenght--;
+	win->map->wide = i;
 	init_val_b(win);
 	free_all(win, strs);
 }

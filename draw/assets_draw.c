@@ -38,9 +38,10 @@ void	draw_background(t_window *win, int floor, int ceiling)
 	t_point	end;
 
 	start = assign_int_point(0, 0);
-	end = assign_int_point(win->map.wide * 25 + 10, win->map.lenght * 50 + 21);
+	printf("len=%d, wide=%d\n",win->map->len, win->map->wide);
+	end = assign_int_point(win->map->wide * 25 + 10, win->map->len * 50 + 21);
 	cub_drawer(win->img, start, end, floor);
-	start = assign_int_point(0, win->map.wide * 25 + 9);
-	end = assign_int_point(win->map.wide * 25 + 11, win->map.lenght * 50 + 21);
+	start = assign_int_point(0, win->map->wide * 25 + 9);
+	end = assign_int_point(win->map->wide * 25 + 11, win->map->len * 50 + 21);
 	cub_drawer(win->img, start, end, ceiling);
 }

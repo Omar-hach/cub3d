@@ -22,7 +22,7 @@ CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
-FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" 
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" -g -fsanitize=address
 
 SRC = 	parsing/cub3d.c\
 		parsing/get_element.c\

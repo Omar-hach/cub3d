@@ -56,12 +56,12 @@ t_vector	assign_vect(double vx, double vy, double angle)
 t_point	pos_adjast(t_window *win, t_point pos)
 {
 	if (pos.x < 5)
-		pos.x = win->map.lenght * 10;
-	else if (pos.x > win->map.lenght * 10)
+		pos.x = win->map->len * 10;
+	else if (pos.x > win->map->len * 10)
 		pos.x = 6;
 	if (pos.y < 5)
-		pos.y = win->map.wide * 10;
-	else if (pos.y > win->map.wide * 10)
+		pos.y = win->map->wide * 10;
+	else if (pos.y > win->map->wide * 10)
 		pos.y = 6;
 	return (pos);
 }

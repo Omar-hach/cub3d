@@ -68,13 +68,13 @@ void	draw_mini_map(t_window *win, char **matrix)
 	x = -1;
 	y = -1;
 	start = assign_int_point(0, 0);
-	end = assign_int_point(win->map.wide * 10 + 4, win->map.lenght * 10 + 4);
+	end = assign_int_point(win->map->wide * 10 + 4, win->map->len * 10 + 4);
 	cub_drawer(win->img, start, end, 0x909090FF);
 	end = assign_int_point(10, 10);
-	while (++x < win->map.wide)
+	while (++x < win->map->wide)
 	{
 		y = -1;
-		while (++y < win->map.lenght && matrix[x][y])
+		while (++y < win->map->len && matrix[x][y])
 		{
 			start = assign_int_point(y * 10 + 2, x * 10 + 2);
 			if (matrix[x][y] == '1')
@@ -94,18 +94,18 @@ int	check_inside_b(t_window *win, t_point player)
 
 	i = (player.y + 1) / 10;
 	j = (player.x + 1) / 10;
-	if (win->map.mapo[i][j] == '1' || win->map.mapo[i][j] == ' '
-			|| !win->map.mapo[i][j])
+	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
+			|| !win->map->mapo[i][j])
 		return (0);
 	i = (player.y - 5) / 10;
 	j = (player.x - 5) / 10;
-	if (win->map.mapo[i][j] == '1' || win->map.mapo[i][j] == ' '
-			|| !win->map.mapo[i][j])
+	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
+			|| !win->map->mapo[i][j])
 		return (0);
 	i = (player.y - 2) / 10;
 	j = (player.x - 2) / 10;
-	if (win->map.mapo[i][j] == '1' || win->map.mapo[i][j] == ' '
-			|| !win->map.mapo[i][j])
+	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
+			|| !win->map->mapo[i][j])
 		return (0);
 	return (1);
 }
@@ -153,14 +153,14 @@ void	keyhook_b(void *param)
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
 	{
 		mlx_delete_image(win->mlx_ptr, win->img);
-		free_all(win, win->map.mapo);
+		free_all(win, win->map->mapo);
 		exit(0);
 	}
 	draw_background(win, ft_color(120, 0, 00), ft_color(0, 0, 120));
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	next_pos = mov_player(win->player->p, win->player->v, win->mlx_ptr);
 	r = draw_scene_b(win, next_pos);
-	draw_mini_map(win, win->map.mapo);
+	draw_mini_map(win, win->map->mapo);
 	draw_line(win, win->player->p, r.p);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 }

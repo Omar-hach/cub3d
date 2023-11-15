@@ -16,7 +16,6 @@ void get_player_location(t_player *player, t_map *g)
 {
 	int i = 0;
 	int j = 0;
-    player = ft_calloc(1, sizeof(t_player));
 	while (g->mapo[i])
 	{
 		j = 0;
@@ -31,8 +30,8 @@ void get_player_location(t_player *player, t_map *g)
 					player->angle = M_PI;
 				else if (g->mapo[i][j] == 'S')
 					player->angle = M_PI_2 * 3;
-				player->p.y = i * 10 + 2;
-				player->p.x = j * 10 + 2;
+				player->p.y = i * 10 + 7;
+				player->p.x = j * 10 + 7;
 			}
 			j++;
 		}
@@ -90,10 +89,10 @@ int get_text(t_map *g)
 			cut_txt(g->full_file[i], g, 2);
 		else if(compare_txt(g->full_file[i], "EA", 2) && !g->ea)
 			cut_txt(g->full_file[i], g, 3);
-        else if(compare_txt(g->full_file[i], "C", 1) && !g->c)
+        /*else if(compare_txt(g->full_file[i], "C", 1) && !g->c)
             cut_txt(g->full_file[i], g, 5);
         else if(compare_txt(g->full_file[i], "F", 1) && !g->f)
-            cut_txt(g->full_file[i], g, 6);
+            cut_txt(g->full_file[i], g, 6);*/
 		i++;
 	}
 	return(1);
