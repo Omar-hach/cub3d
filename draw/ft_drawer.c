@@ -74,7 +74,7 @@ void	keyhook(void *param)
 	win = (t_window *)param;
 	mlx_delete_image(win->mlx_ptr, win->img);
 	win->img = mlx_new_image(win->mlx_ptr,
-			win->screen.x, win->screen.y);
+			win->screen->x, win->screen->y);
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_RIGHT))
 		win->player->angle = angle_adjast(win->player->angle, '+');
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
@@ -85,31 +85,33 @@ void	keyhook(void *param)
 		free_all(win, win->map.mapo);// there is  lot of leaks hire
 		exit(0);
 	}
-	next_pos = assign_int_point(win->player->p.x, win->player->p.y);
+	r.p = win->player->p;
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	next_pos = pos_adjast(win, mov_player(win->player->p,
 				win->player->v, win->mlx_ptr));
 	draw_background(win, ft_color(80, 80, 00), ft_color(0, 80, 80));
-	r = draw_scene(win, win->map.mapo, next_pos);
+	r = draw_scene(win, next_pos, r);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 }
 
 void	init_val(t_window *win)
 {
-	win->screen.x = 1280;
-	win->screen.y = 720;
+	win->screen->x = 1280;
+	win->screen->y = 720;
 	win->player->speed = 0.5;
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	win->t.ea = mlx_load_png("assets/m64 atlantic.png");
 	win->t.so = mlx_load_png("assets/bowser_2.png");
 	win->t.no = mlx_load_png("assets/bowser3.png");
 	win->t.we = mlx_load_png("assets/egypt.png");
-	win->mlx_ptr = mlx_init(win->screen.x, win->screen.y,
+	win->mlx_ptr = mlx_init(win->screen->x, win->screen->y,
 			"Super Duper Cool 3D Game!!!", false);
 	if (!win->mlx_ptr)
 		error();
+	printf("win.x=%d,y=%d", win->screen->x, win->screen->y);
+	printf("win.x=%f,y=%f", win->player->p.x, win->player->p.y);
 	win->img = mlx_new_image(win->mlx_ptr,
-			win->screen.x, win->screen.y);
+			win->screen->x, win->screen->y);
 	if (!win->img)
 		error();
 	mlx_loop_hook(win->mlx_ptr, &keyhook, win);

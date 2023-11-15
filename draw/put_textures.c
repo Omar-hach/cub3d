@@ -12,6 +12,11 @@
 
 #include "../cub3d.h"
 
+int	ft_color(int r, int g, int b)
+{
+	return (((r << 24) | (g << 16) | (b << 8) | 0xff));
+}
+
 void	texture_to_img(t_window *win, t_point mesure, mlx_texture_t *txt,
 	t_cord cord)
 {
@@ -22,10 +27,10 @@ void	texture_to_img(t_window *win, t_point mesure, mlx_texture_t *txt,
 
 	step = txt->height / mesure.y;
 	tex_pos = 0;
-	while (cord.y < (win->screen.y + mesure.y) / 2)
+	while (cord.y < (win->screen->y + mesure.y) / 2)
 	{
 		tex_pos += step;
-		if ((int) cord.y < win->screen.y && cord.y > 0
+		if ((int) cord.y < win->screen->y && cord.y > 0
 			&& ((int)tex_pos * txt->width + (int)mesure.x) < txt->height
 			* txt->width)
 		{
@@ -47,7 +52,7 @@ void	texturess(t_window *win, t_ray r, t_cord cord)
 
 	cube.x = fmod(r.p.x - 2, 10) / 10;
 	cube.y = fmod(r.p.y - 2, 10) / 10;
-	mesure.y = win->screen.y / r.distance * 10;
+	mesure.y = win->screen->y / r.dist * 10;
 	if (r.side == 'w')
 		txt = win->t.we;
 	else if (r.side == 'e')

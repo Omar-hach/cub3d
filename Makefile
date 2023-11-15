@@ -22,9 +22,10 @@ CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
-FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" -fsanitize=address -g
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
 
 SRC = 	parsing/cub3d.c\
+		parsing/ft_start.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c\
 		draw/init_tools.c\
@@ -33,7 +34,9 @@ SRC = 	parsing/cub3d.c\
 		draw/put_textures.c\
 		draw/raycasting.c
 
-SRC_bonus = bonus/cub3D_bonus.c\
+SRC_bonus = bonus/cub3d_bonus.c\
+			bonus/draw_bonus.c\
+			parsing/ft_start.c\
 			draw/ft_drawer.c\
 			draw/map_draw.c\
 			draw/init_tools.c\
@@ -57,7 +60,7 @@ $(NAME): $(OBJ) $(HEADER)
 
 bonus: $(NAME_bonus) 
 
-$(NAME_bonus):$(OBJ) $(OBJ_bonus) $(HEADER)
+$(NAME_bonus): $(OBJ_bonus) $(HEADER)
 	make -C ./libft
 	$(CC) $(FLAGS) $(LIBFT) $(OBJ_bonus) -o $(NAME_bonus)
  

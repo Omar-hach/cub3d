@@ -12,11 +12,6 @@
 
 #include "../cub3d.h"
 
-int	ft_color(int r, int g, int b)
-{
-	return (((r << 24) | (g << 16) | (b << 8) | 0xff));
-}
-
 double	dot_vect(t_vector vect, t_vector vect2)
 {
 	double	dot;
@@ -33,34 +28,54 @@ double	norme_vect(t_vector vect)
 	return (norme);
 }
 
-t_ray	draw_scene(t_window *win, char **matrix, t_point next_pos)
+t_point	in_cube_pos(t_window *win, t_cord cord, t_vector v)
+{
+	t_point	cubepos;
+
+	if (v.x > 0)
+		cubepos.x = (cord.x * 10 + 12 - win->player->p.x) / 10;
+	else
+		cubepos.x = (win->player->p.x - cord.x * 10 - 2) / 10;
+	if (v.y > 0)
+		cubepos.y = (cord.y * 10 + 12 - win->player->p.y) / 10;
+	else
+		cubepos.y = (win->player->p.y - cord.y * 10 - 2) / 10;
+	return (cubepos);
+}
+
+t_cord	assign_cord(int x, int y)
+{
+	t_cord	cord;
+
+	cord.x = x;
+	cord.y = y;
+	return (cord);
+}
+
+t_ray	draw_scene(t_window *win, t_point next_pos, t_ray r)
 {
 	double		plane;
+	t_cord		pixel;
 	t_cord		cord;
-	t_ray		r;
-	t_vector	nv;
+	t_vector	plane_v;
 
-	cord.x = -1;
-	cord.y = 0;
+	pixel = assign_cord(-1, 0);
+	cord = assign_cord((win->player->p.x - 2) / 10,
+			(win->player->p.y - 2) / 10);
 	win->player->p = assign_point(next_pos.x, next_pos.y);
-	r.p = win->player->p;
 	if (check_inside(win, next_pos))
 	{
-		while (++cord.x < win->screen.x)
+		while (++pixel.x < win->screen->x)
 		{
-			plane = (2 * (double)cord.x / 40 - 32) * M_PI / (double)180;
-			nv = assign_vect(win->player->speed, 0,
+			plane = (2 * (double)pixel.x / 40 - 32) * M_PI / (double)180;
+			plane_v = assign_vect(win->player->speed, 0,
 					win->player->angle + plane);
-			r = raycast(win, matrix, nv);
-			r.distance = sqrt(pow(r.p.x - next_pos.x, 2) + pow(r.p.y - next_pos.y, 2))
-				* (dot_vect(win->player->v, nv) / (norme_vect(nv) * norme_vect(win->player->v)));
-			if (r.distance < 2)
+			r = raycast(win, 1, plane_v, cord);
+			if (r.dist < 2)
 				return (r);
-			cord.y = (win->screen.y - win->screen.y / r.distance * 10) / 2 - 1; // 10 is the size of the cub
-			texturess(win, r, cord);
+			pixel.y = (win->screen->y - win->screen->y / r.dist * 10) / 2 - 1;
+			texturess(win, r, pixel);
 		}
 	}
 	return (r);
 }
-
-//r.distance = sqrt(pow(r.p.x - win->player->p.x, 2) + pow(r.p.y - win->player->p.y, 2)) * cos(angle_adjast(plane, '*'));
