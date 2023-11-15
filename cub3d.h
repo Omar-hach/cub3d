@@ -112,7 +112,7 @@ t_vector	assign_vect(double vx, double vy, double angle);
 t_point		pos_adjast(t_window *win, t_point pos);
 
 int			check_inside(t_window *win, t_point player);
-t_segm		wall(t_cord cord, t_window *win, t_cord step, int is_it_x);
+t_segm	wall(t_cord cord, t_window *win, t_vector v, int is_it_x);
 t_ray		draw_scene(t_window *win, t_point next_pos, t_ray r);
 t_vector	rotation_vect(t_vector vect, double deg);
 void		draw_background(t_window *win, int floor, int ceiling);
@@ -120,7 +120,8 @@ void		draw_line(t_window *win, t_point start, t_point end);
 void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
 
 void		texturess(t_window *win, t_ray r, t_cord cord);
-t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
+t_ray		raycast(t_window *win, int side, t_point pos, t_vector v);
+//t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
 int			ft_color(int r, int g, int b);
 double		norme_vect(t_vector vect);
 double		dot_vect(t_vector vect, t_vector vect2);

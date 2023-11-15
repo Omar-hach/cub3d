@@ -31,13 +31,9 @@ int	check_inside(t_window *win, t_point player)
 {
 	int	i;
 	int	j;
-	int	x;
-	int	y;
 
 	i = (player.y - 2) / 10;
 	j = (player.x - 2) / 10;
-	x = (player.y - 2) / 10;
-	y = (player.x - 2) / 10;
 	if (win->map.mapo[i][j] == '0' || win->map.mapo[i][j] == 'W'
 			|| win->map.mapo[i][j] == 'E' || win->map.mapo[i][j] == 'N'
 			|| win->map.mapo[i][j] == 'S')

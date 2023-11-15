@@ -12,7 +12,7 @@
 
 #include "../cub3d.h"
 
-t_segm	wall(t_cord cord, t_window *win, t_cord step, int is_it_x)
+t_segm	wall(t_cord cord, t_window *win, t_vector v, int is_it_x)
 {
 	t_segm	wall;
 
@@ -20,7 +20,7 @@ t_segm	wall(t_cord cord, t_window *win, t_cord step, int is_it_x)
 	{
 		wall.end = assign_point(win->map.lenght * 10, cord.y * 10 + 12);
 		wall.start = assign_point(10, cord.y * 10 + 12);
-		if (step.y > 0)
+		if (v.y >= 0)
 		{
 			wall.end = assign_point(win->map.lenght * 10, cord.y * 10 + 2);
 			wall.start = assign_point(10, cord.y * 10 + 2);
@@ -30,7 +30,7 @@ t_segm	wall(t_cord cord, t_window *win, t_cord step, int is_it_x)
 	{
 		wall.end = assign_point(cord.x * 10 + 12, win->map.wide * 10);
 		wall.start = assign_point(cord.x * 10 + 12, 10);
-		if (step.x > 0)
+		if (v.x >= 0)
 		{
 			wall.end = assign_point(cord.x * 10 + 2, win->map.wide * 10);
 			wall.start = assign_point(cord.x * 10 + 2, 10);
@@ -82,30 +82,30 @@ t_ray	assign_ray(t_window *win, int side, t_segm edge, t_vector v)
 	return (r);
 }
 
-t_ray	raycast(t_window *win, int side, t_vector v, t_cord cord)
+t_ray	raycast(t_window *win, int side, t_point pos, t_vector v)
 {
-	t_cord	step;
+	t_cord	cord;
 	t_point	cubepos;
 	t_point	unite;
 
+	cord = assign_cord((pos.x - 2) / 10, (pos.y - 2) / 10);
 	cubepos = in_cube_pos(win, cord, v);
-	step = assign_cord((v.x >= 0) - (v.x < 0), (v.y >= 0) - (v.y < 0));
 	unite = assign_point(fabs(cubepos.x / v.x), fabs(cubepos.y / v.y));
 	while (cord.y < win->map.wide && cord.y >= 0 && cord.x < win->map.lenght
 		&& cord.x >= 0 && win->map.mapo[cord.y][cord.x] != '1')
 	{
 		if (unite.x < unite.y || (v.y < 0.00001 && v.y > -0.00001))
 		{
-			cord.x += step.x;
+			cord.x += (v.x >= 0) - (v.x < 0);
 			unite.x += fabs(1 / v.x);
 			side = 1;
 		}
 		else if (unite.x >= unite.y || (v.x < 0.00001 && v.x > -0.00001))
 		{
-			cord.y += step.y;
+			cord.y += (v.y >= 0) - (v.y < 0);
 			unite.y += fabs(1 / v.y);
 			side = -1;
 		}
 	}
-	return (assign_ray(win, side, wall(cord, win, step, side), v));//the error happend if cubepos = 0
+	return (assign_ray(win, side, wall(cord, win, v, side), v));
 }

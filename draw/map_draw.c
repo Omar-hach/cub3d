@@ -56,12 +56,9 @@ t_ray	draw_scene(t_window *win, t_point next_pos, t_ray r)
 {
 	double		plane;
 	t_cord		pixel;
-	t_cord		cord;
 	t_vector	plane_v;
 
 	pixel = assign_cord(-1, 0);
-	cord = assign_cord((win->player->p.x - 2) / 10,
-			(win->player->p.y - 2) / 10);
 	win->player->p = assign_point(next_pos.x, next_pos.y);
 	if (check_inside(win, next_pos))
 	{
@@ -70,7 +67,7 @@ t_ray	draw_scene(t_window *win, t_point next_pos, t_ray r)
 			plane = (2 * (double)pixel.x / 40 - 32) * M_PI / (double)180;
 			plane_v = assign_vect(win->player->speed, 0,
 					win->player->angle + plane);
-			r = raycast(win, 1, plane_v, cord);
+			r = raycast(win, 1, win->player->p, plane_v);
 			if (r.dist < 2)
 				return (r);
 			pixel.y = (win->screen->y - win->screen->y / r.dist * 10) / 2 - 1;
