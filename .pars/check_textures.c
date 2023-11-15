@@ -87,9 +87,9 @@ void	check_textures_rgb(t_textures *t)
 
 	i = 0;
 	// i++;
-	while(t->c[i])
+	while (t->c[i])
 	{
-		if(!ft_isdigit(t->c[i]) && t->c[i] != 'C' && t->c[i] != ' ' && t->c[i] != ','  && t->c[i] != '\n')
+		if (!ft_isdigit(t->c[i]) && t->c[i] != 'C' && t->c[i] != ' ' && t->c[i] != ','  && t->c[i] != '\n')
 		{
 			printf("error there is an external component\n");
 			exit(2);
@@ -97,9 +97,9 @@ void	check_textures_rgb(t_textures *t)
 		i++;
 	}
 	i = 0;
-	while(t->f[i])
+	while (t->f[i])
 	{
-		if(!ft_isdigit(t->f[i]) && t->f[i] != 'F' && t->f[i] != ' ' && t->f[i] != ','  && t->f[i] != '\n')
+		if (!ft_isdigit(t->f[i]) && t->f[i] != 'F' && t->f[i] != ' ' && t->f[i] != ','  && t->f[i] != '\n')
 		{
 			printf("error there is an external component\n");
 			exit(2);

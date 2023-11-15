@@ -18,28 +18,95 @@
 // 	exit(EXIT_FAILURE);
 // }
 
-int main(int ac, char **av)
+void	error(void)
 {
-	int		fd;
-	char	**strs;
-	int		i;
-
-	i = 0;
-	if (ac == 2)
-	{
-		strs = (char **)ft_calloc(100, sizeof(char *));
-		fd = open(av[1], O_RDWR);
-		while (1)
-		{
-			strs[i] = get_next_line(fd);
-			if (!strs[i])
-				break;
-			i++;
-		}
-		//i = check_textures(strs, &t, &floor, &ceiling);
-		ft_start(i, strs);
-	}
-	else
-		return (1);
+	puts(mlx_strerror(mlx_errno));
+	exit(EXIT_FAILURE);
 }
+
+void free_all(t_window *win, char **elem)
+{
+	int j;
+
+	j = -1;
+	while (elem[++j])
+	{
+		free(elem[j]);
+	}
+	free(elem);
+	mlx_delete_image(win->mlx_ptr, win->img);
+	mlx_terminate(win->mlx_ptr);
+	free(win->player);
+	free(win);
+	//system("leaks $(ps | grep cub3D | awk '{if (NR==1) print$1}')");
+}
+
+// void get_player_location(t_player *player, char **mapo)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	while (mapo[i])
+// 	{
+// 		j = 0;
+// 		while (mapo[i][j])
+// 		{
+// 			if (mapo[i][j] == 'N' || mapo[i][j] == 'E' || mapo[i][j] == 'W' || mapo[i][j] == 'S')
+// 			{
+// 				player->angle = 0;
+// 				if (mapo[i][j] == 'N')
+// 					player->angle = M_PI_2;
+// 				else if (mapo[i][j] == 'W')
+// 					player->angle = M_PI;
+// 				else if (mapo[i][j] == 'S')
+// 					player->angle = M_PI_2 * 3;
+// 				player->p.y = i * 10 + 2;
+// 				player->p.x = j * 10 + 2;
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+
+void ft_start(t_map *g)
+{
+	t_window *win;
+	// int j;
+	win = (t_window *)ft_calloc(1, sizeof(t_window));
+	win->player = g->player;
+	win->map = g;
+	win->map->wide = g->wide;
+	win->map->len = g->len;
+	//check_zero_surrond(win.map.mapo);
+	// win->map.lenght--;
+	// win->map.wide = i;
+
+	init_val(win);
+	// free_all(win, strs);
+}
+
+// int main(int ac, char **av)
+// {
+// 	int		fd;
+// 	char	**strs;
+// 	int		i;
+
+// 	i = 0;
+// 	if (ac == 2)
+// 	{
+// 		strs = (char **)ft_calloc(100, sizeof(char *));
+// 		fd = open(av[1], O_RDWR);
+// 		while (1)
+// 		{
+// 			strs[i] = get_next_line(fd);
+// 			if (!strs[i])
+// 				break;
+// 			i++;
+// 		}
+// 		//i = check_textures(strs, &t, &floor, &ceiling);
+// 		ft_start(i, strs);
+// 	}
+// 	else
+// 		return (1);
+// }
 

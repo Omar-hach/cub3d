@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+         #
+#    By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 22:56:03 by ohachami          #+#    #+#              #
-#    Updated: 2023/09/02 22:56:05 by ohachami         ###   ########.fr        #
+#    Updated: 2023/11/15 12:05:43 by mdouzi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,12 @@ CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
-FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib"
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" 
 
 SRC = 	parsing/cub3d.c\
-		parsing/ft_start.c\
+		parsing/get_element.c\
+		parsing/get_map.c\
+		parsing/read_file.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c\
 		draw/init_tools.c\
@@ -34,9 +36,7 @@ SRC = 	parsing/cub3d.c\
 		draw/put_textures.c\
 		draw/raycasting.c
 
-SRC_bonus = bonus/cub3d_bonus.c\
-			bonus/draw_bonus.c\
-			parsing/ft_start.c\
+SRC_bonus = bonus/cub3D_bonus.c\
 			draw/ft_drawer.c\
 			draw/map_draw.c\
 			draw/init_tools.c\
@@ -60,7 +60,7 @@ $(NAME): $(OBJ) $(HEADER)
 
 bonus: $(NAME_bonus) 
 
-$(NAME_bonus): $(OBJ_bonus) $(HEADER)
+$(NAME_bonus):$(OBJ) $(OBJ_bonus) $(HEADER)
 	make -C ./libft
 	$(CC) $(FLAGS) $(LIBFT) $(OBJ_bonus) -o $(NAME_bonus)
  
