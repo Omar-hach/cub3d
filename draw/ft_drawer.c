@@ -12,118 +12,97 @@
 
 #include "../cub3d.h"
 
-
-t_point assign_point(int x, int y, int color)
+t_vector	rotation_vect(t_vector vect, double deg)
 {
-	t_point p;
+	t_vector	new_vect;
 
-	p.x = x;
-	p.y = y;
-	p.color = color;
-	return (p);
+	new_vect.x = vect.y * sin(deg) + vect.x * cos(deg);
+	new_vect.y = vect.y * cos(deg) - vect.x * sin(deg);
+	if (new_vect.y < 0.00000000000001
+		&& new_vect.y > -0.0000000000001)
+		new_vect.y = 0;
+	if (new_vect.x < 0.00000000000001
+		&& new_vect.x > -0.0000000000001)
+		new_vect.x = 0;
+	return (new_vect);
 }
 
-int check_inside(t_window *win, t_point *player)
+int	check_inside(t_window *win, t_point player)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
-	i = (player->y + 10) / 50;
-	j = (player->x + 10) / 50;
-	//ft_printf("angle=[%d][%d]\n", i, j);
-	if(!i || !j)
-	{
-		player->y += !i;
-		player->x += !j;
-		return(0);
-	}
-	if(win->map.elem[i][j] == '1')
-	{
-		if(win->map.elem[i + 1][j] == '1' || win->map.elem[i - 1][j] == '1')
-			player->y--;
-		if(win->map.elem[i][j + 1] == '1' || win->map.elem[i][j - 1] == '1')
-			player->x--;
-		return(0);
-	}
-	else
-	{
-		return(1);
-	}
+	i = (player.y - 2) / 10;
+	j = (player.x - 2) / 10;
+	if (win->map->mapo[i][j] == '0' || win->map->mapo[i][j] == 'W'
+			|| win->map->mapo[i][j] == 'E' || win->map->mapo[i][j] == 'N'
+			|| win->map->mapo[i][j] == 'S')
+		return (1);
+	return (0);
 }
 
-
-t_player	mov_player(t_player player, int x, int y, float angle)
+t_point	mov_player(t_point player, t_vector v, mlx_t *mlxp)
 {
-	player.p.x += x;
-	player.p.y += y;
-	player.angle = angle;
-	return(player);
+	t_point	next_pos;
+
+	next_pos = player;
+	if (mlx_is_key_down(mlxp, MLX_KEY_W))
+		next_pos = assign_point(next_pos.x + v.x,
+				next_pos.y + v.y);
+	if (mlx_is_key_down(mlxp, MLX_KEY_S))
+		next_pos = assign_point(next_pos.x - v.x,
+				next_pos.y - v.y);
+	if (mlx_is_key_down(mlxp, MLX_KEY_D))
+		next_pos = assign_point(next_pos.x + v.y,
+				next_pos.y - v.x);
+	if (mlx_is_key_down(mlxp, MLX_KEY_A))
+		next_pos = assign_point(next_pos.x - v.y,
+				next_pos.y + v.x);
+	return (next_pos);
 }
 
 void	keyhook(void *param)
 {
-	t_window	*win = (t_window *)param;
-	//t_point		start;
-	//t_point		end;
-	//int			i;
+	t_window	*win;
+	t_point		next_pos;
+	t_ray		r;
 
+	win = (t_window *)param;
 	mlx_delete_image(win->mlx_ptr, win->img);
-	//mlx_delete_image(win->mlx_ptr, win->img2);
-	//printf("angle=%f",win->player.angle);
-	win->img = mlx_new_image(win->mlx_ptr, win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_S) && check_inside(win, &win->player.p))
-	{
-		win->player.p.x += cos(win->player.angle * M_PI / 180);
-		win->player.p.y -= sin(win->player.angle * M_PI / 180);
-		//ft_printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_W) && check_inside(win, &win->player.p))
-	{
-		win->player.p.x -= cos(win->player.angle * M_PI / 180);
-		win->player.p.y += sin(win->player.angle * M_PI / 180);
-		//ft_printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_D) && check_inside(win, &win->player.p))
-	{
-		win->player.p.x -= sin(win->player.angle * M_PI / 180);
-		win->player.p.y -= cos(win->player.angle * M_PI / 180);
-		//ft_printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	}
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_A) && check_inside(win, &win->player.p))
-	{
-		win->player.p.x += sin(win->player.angle * M_PI / 180);
-		win->player.p.y += cos(win->player.angle * M_PI / 180);
-		//ft_printf("x=%d,y=%d",win->player.p.x, win->player.p.y);
-	}
+	win->img = mlx_new_image(win->mlx_ptr,
+			win->screen->x, win->screen->y);
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_RIGHT))
-	{
-		win->player.angle = angle_adjast(win->player.angle, '+');
-		
-	}
+		win->player->angle = angle_adjast(win->player->angle, '+');
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
+		win->player->angle = angle_adjast(win->player->angle, '-');
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
 	{
-		win->player.angle = angle_adjast(win->player.angle, '-');
+		mlx_delete_image(win->mlx_ptr, win->img);
+		free_all(win, win->map->mapo);// there is  lot of leaks hire
+		exit(0);
 	}
-	ft_draw_map(win, win->map.elem, &win->player);
+	r.p = win->player->p;
+	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
+	next_pos = pos_adjast(win, mov_player(win->player->p,
+				win->player->v, win->mlx_ptr));
+	draw_background(win, ft_color(80, 80, 00), ft_color(0, 80, 80));
+	r = draw_scene(win, next_pos, r);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
-	// mlx_image_to_window(win->mlx_ptr, win->img2, 0, 0);
-	//win->img2 = mlx_put_string(win->mlx_ptr, "lol", 00, 00);
 }
 
-void init_val(t_window	*win)
+void	init_val(t_window *win)
 {
-	win->mlx_ptr = mlx_init(win->map.lenght * 50 + 20, win->map.wide * 50 + 20, "Test", true);
+	win->player->speed = 0.5;
+	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
+	win->mlx_ptr = mlx_init(win->screen->x, win->screen->y,
+			"Super Duper Cool 3D Game!!!", false);
 	if (!win->mlx_ptr)
 		error();
-	win->img = mlx_new_image(win->mlx_ptr, win->map.lenght * 50 + 20, win->map.wide * 50 + 20);
+	win->img = mlx_new_image(win->mlx_ptr,
+			win->screen->x, win->screen->y);
 	if (!win->img)
 		error();
-	win->player.p = assign_point(310, 60, 0); // first find the player and it is cordination.
-	win->player.angle = 0;
-	ft_draw_map(win, win->map.elem, &win->player);
-	//printf("|x=%d,y=%d",win.player.p.x, win.player.p.y);
 	mlx_loop_hook(win->mlx_ptr, &keyhook, win);
-	ft_printf(" |OK| \n");
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 	mlx_loop(win->mlx_ptr);
 }

@@ -5,157 +5,74 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohachami <ohachami@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/14 19:16:33 by ohachami          #+#    #+#             */
-/*   Updated: 2023/09/14 19:16:35 by ohachami         ###   ########.fr       */
+/*   Created: 2023/09/28 04:28:17 by ohachami          #+#    #+#             */
+/*   Updated: 2023/09/28 04:28:20 by ohachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	angle_adjast(int angle, char sign)
+double	dot_vect(t_vector vect, t_vector vect2)
 {
-	if(angle <= 0)
-		angle = 360;
-	if(sign == '-')
-		angle--;
-	if(sign == '+')
-		angle++;
-	if(angle > 360)
-		angle = 1;
-	return(angle);
+	double	dot;
+
+	dot = vect.y * vect2.y + vect.x * vect2.x;
+	return (dot);
 }
 
-void	draw_line(t_window *win, t_point start, t_point end)
+double	norme_vect(t_vector vect)
 {
-	t_point	line;
-	float	big;
-	t_point	steps;
-	t_point	pixels;
-	int		i;
+	double	norme;
 
-	i = 0;
-	line.x = end.x - start.x;
-	line.y = end.y - start.y;
-	if (abs(line.x) > abs(line.y))
-		big = abs(line.x);
+	norme = sqrt(pow(vect.x, 2) + pow(vect.y, 2));
+	return (norme);
+}
+
+t_point	in_cube_pos(t_window *win, t_cord cord, t_vector v)
+{
+	t_point	cubepos;
+
+	if (v.x > 0)
+		cubepos.x = (cord.x * 10 + 12 - win->player->p.x) / 10;
 	else
-		big = abs(line.y);
-	steps.x = line.x / big;
-	steps.y = line.y / big;
-	pixels = start;
-	while (i < big)
-	{
-		printf("y=%d x=%d\n", (int)pixels.y / 50, (int)pixels.x / 50);
-		printf("y=%d x=%d\n", (int)start.y, (int)start.x);
-		if (win->map.elem[(int)pixels.x / 50][(int)pixels.y / 50] == '1') // the problem is here pixels.y overflow
-			break ;
-		mlx_put_pixel(win->img, (int)pixels.x, (int)pixels.y, 0x1100FFff);
-		pixels.x += steps.x;
-		pixels.y += steps.y;
-		i++;
-	}
+		cubepos.x = (win->player->p.x - cord.x * 10 - 2) / 10;
+	if (v.y > 0)
+		cubepos.y = (cord.y * 10 + 12 - win->player->p.y) / 10;
+	else
+		cubepos.y = (win->player->p.y - cord.y * 10 - 2) / 10;
+	return (cubepos);
 }
 
-void	cub_drawer(mlx_image_t *img, t_point start, t_point end, int color)
+t_cord	assign_cord(int x, int y)
 {
-	int	i;
-	int	j;
+	t_cord	cord;
 
-	i = 0;
-	j = 0;
-	while (i < end.x - 1)
-	{
-		j = 0;
-		while (j < end.y - 1)
-		{
-			mlx_put_pixel(img, start.x + j, start.y + i, color);
-			j++;
-		}
-		i++;
-	}
+	cord.x = x;
+	cord.y = y;
+	return (cord);
 }
 
-t_point	player_drawer(mlx_image_t *img, t_point pos, t_player player,  int color)
+t_ray	draw_scene(t_window *win, t_point next_pos, t_ray r)
 {
-	int	r;
-	float deg;
+	double		plane;
+	t_cord		pixel;
+	t_vector	plane_v;
 
-	r = -1;
-	deg = 0;
-	if(player.p.x != 0 || player.p.y != 0)
-		pos = player.p;
-	while(++r < 25)
-		mlx_put_pixel(img, pos.x + 25 ,pos.y + 25 + r, color);
-	r = 0;
-	while(r < 11)
+	pixel = assign_cord(-1, 0);
+	win->player->p = assign_point(next_pos.x, next_pos.y);
+	if (check_inside(win, next_pos))
 	{
-		deg = 0;
-		while (deg < M_PI * 2)
+		while (++pixel.x < win->screen->x)
 		{
-			mlx_put_pixel(img, pos.x + 25 + r * cos(deg),
-				pos.y + 25 + r * sin(deg), color);
-			deg +=  M_PI / 180;
+			plane = (2 * (double)pixel.x / 40 - 32) * M_PI / (double)180;
+			plane_v = assign_vect(win->player->speed, 0,
+					win->player->angle + plane);
+			r = raycast(win, 1, win->player->p, plane_v);
+			if (r.dist < 2)
+				return (r);
+			pixel.y = (win->screen->y - win->screen->y / r.dist * 10) / 2 - 1;
+			texturess(win, r, pixel);
 		}
-		r++;
 	}
-	return(pos);
+	return (r);
 }
-
-/*
-t_point	player_drawer(mlx_image_t *img, t_point pos, t_player player,  int color)
-{
-	int	r;
-	float deg;
-
-	r = -1;
-	deg = angle_adjast(player.angle, '+');
-	if(player.p.x != 0 || player.p.y != 0)
-		pos = player.p;
-	while(++r < 25)
-		mlx_put_pixel(img, pos.x + 25 ,pos.y + 25 + r, color);
-	r = 0;
-	while(r < 11)
-	{
-		deg = angle_adjast(player.angle, '+');
-		mlx_put_pixel(img, pos.x + 25 + r * cos(deg),
-				pos.y + 25 + (r) * sin(deg++), color);
-		while (deg < M_PI * 2)
-		{
-			mlx_put_pixel(img, pos.x + 25 + r * cos(deg),
-				pos.y + 25 + r * sin(deg), color);
-			deg +=  M_PI / 180;
-		}
-		r++;
-	}
-	return(pos);
-}*/
-
-void	ft_draw_map(t_window *win, char **matrix, t_player *player)
-{
-	int		i;
-	int		j;
-	t_point	start;
-	t_point	end;
-
-	i = -1;
-	j = -1;
-	start = assign_point(0, 0, 0);
-	end = assign_point(win->map.wide * 50 + 20, win->map.lenght * 50 + 20, 0);
-	cub_drawer(win->img, start, end, 0x909090FF);
-	end = assign_point(50, 50, 0);
-	while (++i < win->map.wide)
-	{
-		j = -1;
-		while (++j < win->map.lenght)
-		{
-			start = assign_point(j * 50 + 10, i * 50 + 10, 0);
-			if (matrix[i][j] == '1')
-				cub_drawer(win->img, start, end, 0x09005EFF);
-			else if ((matrix[i][j] != ' ' && matrix[i][j] != '\n') ||  !matrix[i][j])
-				cub_drawer(win->img, start, end, 0xB8A649FF);
-		}
-	}
-	player->p = player_drawer(win->img, start, *player, 0xFF322BFF);
-	//printf(" x=%d,y=%d|a=%f ",win->player.p.x, win->player.p.y, win->player.angle);
-}
-

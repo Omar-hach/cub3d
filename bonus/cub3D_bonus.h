@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+        */
+/*   By: ohachami <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 10:33:00 by ohachami          #+#    #+#             */
-/*   Updated: 2023/11/15 12:05:08 by mdouzi           ###   ########.fr       */
+/*   Created: 2023/11/13 10:33:37 by ohachami          #+#    #+#             */
+/*   Updated: 2023/11/13 10:33:40 by ohachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
 # include <unistd.h>
 # include <fcntl.h>
-# include "libft/libft.h"
-# include "libft/print/ft_printf.h"
-# include "libft/get_next_line/get_next_line_bonus.h"
-# include "MLX42/MLX42.h"
+# include "../libft/libft.h"
+# include "../libft/print/ft_printf.h"
+# include "../libft/get_next_line/get_next_line_bonus.h"
+# include "../MLX42/MLX42.h"
 
 typedef struct s_texture
 {
@@ -54,7 +53,7 @@ typedef struct s_cord
 typedef struct s_contact
 {
 	t_point	r;
-	double	distance;
+	double	dist;
 }t_contact;
 
 typedef struct s_segm
@@ -80,27 +79,30 @@ typedef struct s_ray
 
 typedef struct s_map
 {
-	char		*split_line;
-	char		*map_line;
-	char		**full_file;
-	t_player	*player;
-	char		**mapo;
-	char		*so;
-	char		*we;
-	char		*ea;
-	char		*no;
-	char		*c;
-	char		*f;
-	int			wide;
-	int			len;
-	int			error_find;
-	int			map_start;
+    char *split_line;
+    char *map_line;
+    char **full_file;
+    t_player *player;
+    char **mapo;
+    char *so;
+    char *we;
+    char *ea;
+    char *no;
+    char *c;
+    char *f;
+	int wide;
+	int len;
+    int error_find;
+    int map_start;
 } t_map;
+
 
 
 typedef struct s_window
 {
+	void		*win_ptr;
 	t_player	*player; // put player position and angle here
+	mlx_image_t	*mini_map;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
 	t_map		*map;
@@ -110,6 +112,7 @@ typedef struct s_window
 
 void		ft_start_map(char *map);
 void		draw_line(t_window *win, t_point start, t_point end);
+void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
 void		player_drawer(t_window *win, t_point pos, int color);
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos,
 				t_vector v);
@@ -121,21 +124,25 @@ t_vector	assign_vect(double vx, double vy, double angle);
 t_point		pos_adjast(t_window *win, t_point pos);
 
 int			check_inside(t_window *win, t_point player);
-t_segm	wall(t_cord cord, t_window *win, t_vector v, int is_it_x);
-t_ray		draw_scene(t_window *win, t_point next_pos, t_ray r);
+t_segm		wall(t_cord cord, t_window *win, t_cord step, int is_it_x);
 t_vector	rotation_vect(t_vector vect, double deg);
-void		draw_background(t_window *win, int floor, int ceiling);
 void		draw_line(t_window *win, t_point start, t_point end);
-void		cub_drawer(t_window *win, t_point start, t_point end, int color);
+void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
 
 void		texturess(t_window *win, t_ray r, t_cord cord);
-t_ray		raycast(t_window *win, int side, t_point pos, t_vector v);
-//t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
-int			ft_color(int r, int g, int b);
+t_point		mov_player(t_point player, t_vector v, mlx_t *mlxp);
+void		draw_background(t_window *win, int floor, int ceiling);
 double		norme_vect(t_vector vect);
+int			ft_color(int r, int g, int b);
 double		dot_vect(t_vector vect, t_vector vect2);
 t_cord		assign_cord(int x, int y);
+t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
 t_point		in_cube_pos(t_window *win, t_cord cord, t_vector v);
+
+void		draw_mini_map(t_window *win, char **matrix);
+int			check_inside_b(t_window *win, t_point player);
+t_ray		draw_scene_b(t_window *win, t_point next_pos);
+void		keyhook_b(void *param);
 
 int			check_first_line(char *str);
 void		check_zero_surrond(char **strs);
@@ -143,18 +150,17 @@ void		check_tab(char **strs);
 void		check_map(char **strs);
 void		error(void);
 void		free_all(t_window *win, char **elem);
-
-
-
+void		get_player_location(t_player *player, char **mapo);
 
 //parse
 
-t_player*	get_player_location(t_player *player, t_map *g);
-int			check_borders_col(t_map *g);
-int			check_borders_line(t_map *g);
-int			get_text(t_map *g);
-int			play_char(char c, int *a);
-int			check_map_line(char **str);
-void		ft_start(t_map *g);
+void 		get_player_location(t_player *player, t_map *g);
+int        check_borders_col(t_map *g);
+int        check_borders_line(t_map *g);
+int 		get_text(t_map *g);
+int 		play_char(char c, int *a);
+int 		check_map_line(char **str);
+void 		ft_start(t_map *g);
 
 #endif
+
