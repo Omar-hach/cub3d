@@ -102,7 +102,6 @@ typedef struct s_window
 {
 	void		*win_ptr;
 	t_player	*player; // put player position and angle here
-	mlx_image_t	*mini_map;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
 	t_map		*map;
@@ -150,11 +149,10 @@ void		check_tab(char **strs);
 void		check_map(char **strs);
 void		error(void);
 void		free_all(t_window *win, char **elem);
-void		get_player_location(t_player *player, char **mapo);
 
 //parse
 
-void 		get_player_location(t_player *player, t_map *g);
+t_player	*get_player_location(t_player *player, t_map *g, int *a);
 int        check_borders_col(t_map *g);
 int        check_borders_line(t_map *g);
 int 		get_text(t_map *g);

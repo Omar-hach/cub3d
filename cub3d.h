@@ -149,12 +149,13 @@ void		free_all(t_window *win, char **elem);
 
 //parse
 
-t_player*	get_player_location(t_player *player, t_map *g);
+t_player	*get_player_location(t_player *player, t_map *g, int *a);
 int			check_borders_col(t_map *g);
 int			check_borders_line(t_map *g);
 int			get_text(t_map *g);
 int			play_char(char c, int *a);
 int			check_map_line(char **str);
 void		ft_start(t_map *g);
+int	get_color(char *color, int r, int g, int b);
 
 #endif

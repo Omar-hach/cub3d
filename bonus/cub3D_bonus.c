@@ -81,7 +81,7 @@ void	ft_start_b(int i, char **strs)
 	get_player_location(win->player, win->map->mapo);
 	check_map(win->map->mapo);
 	//check_zero_surrond(win.map.mapo);
-	win->map->lenght--;
+	win->map->len--;
 	win->map->wide = i;
 	init_val_b(win);
 	free_all(win, strs);

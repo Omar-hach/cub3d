@@ -78,7 +78,7 @@ void	keyhook(void *param)
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
 	{
 		mlx_delete_image(win->mlx_ptr, win->img);
-		free_all(win, win->map->mapo);// there is  lot of leaks hire
+		//free_all(win, win->map->mapo);// there is  lot of leaks hire
 		exit(0);
 	}
 	r.p = win->player->p;
@@ -92,6 +92,7 @@ void	keyhook(void *param)
 
 void	init_val(t_window *win)
 {
+
 	win->player->speed = 0.5;
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	win->mlx_ptr = mlx_init(win->screen->x, win->screen->y,
@@ -102,7 +103,7 @@ void	init_val(t_window *win)
 			win->screen->x, win->screen->y);
 	if (!win->img)
 		error();
-	mlx_loop_hook(win->mlx_ptr, &keyhook, win);
-	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
-	mlx_loop(win->mlx_ptr);
+	//mlx_loop_hook(win->mlx_ptr, &keyhook, win);
+	//mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
+	//mlx_loop(win->mlx_ptr);
 }

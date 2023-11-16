@@ -17,8 +17,8 @@ void	cub_drawer(t_window *win, t_point start, t_point end, int color)
 	int	y;
 	int	x;
 
-	y = start.y;
 	x = start.x;
+	y = start.y;
 	while (x < end.x)
 	{
 		y = start.y;
