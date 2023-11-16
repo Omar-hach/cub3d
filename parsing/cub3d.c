@@ -83,10 +83,23 @@ void ft_start(t_map *g)
 	win->map->wide = g->wide;
 	win->map->len = g->len;
 	win->t.ea = mlx_load_png(g->ea);
-	win->t.so = mlx_load_png(g->so);
-	win->t.no = mlx_load_png(g->no);
-	win->t.we = mlx_load_png(g->we);
-	printf("win.x=%d\n", g->len);
+    win->t.so = mlx_load_png(g->so);
+    win->t.no = mlx_load_png(g->no);
+    win->t.we = mlx_load_png(g->we);
+
+    if(!win->t.ea  || !win->t.so ||  !win->t.we || !win->t.no)
+    {
+        free_all(win, win->map->mapo);
+        printf("error\n");
+        exit(1);
+    }
+
+    free(g->ea);
+    free(g->so);
+    free(g->no);
+    free(g->we);
+    free(g->c);
+    free(g->f);
 	//check_zero_surrond(win.map.mapo);
 	// win->map.lenght--;
 	// win->map.wide = i;
