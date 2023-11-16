@@ -112,7 +112,7 @@ int	prime_clore(char *color, char *num, int *i)
 	j = -1;
 	while (color[*i] == ' ')
 		(*i)++;
-	if (ft_isdigit(color[*i]))
+	if (!ft_isdigit(color[*i]))
 		return (-1);
 	while (color[*i] == '0')
 		(*i)++;
