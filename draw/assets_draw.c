@@ -12,23 +12,25 @@
 
 #include "../cub3d.h"
 
-void	cub_drawer(mlx_image_t *img, t_point start, t_point end, int color)
+void	cub_drawer(t_window *win, t_point start, t_point end, int color)
 {
-	int	i;
-	int	j;
+	int	y;
+	int	x;
 
-	i = 0;
-	j = 0;
-	while (i < end.x - 1)
+	y = start.y;
+	x = start.x;
+	while (x < end.x)
 	{
-		j = 0;
-		while (j < end.y - 1)
+		y = start.y;
+		while (y < end.y)
 		{
-			if(start.x > -j && start.y > -i)
-				mlx_put_pixel(img, start.x + j, start.y + i, color);
-			j++;
+			if(x > win->screen->x && y > win->screen->y
+				&& x < 0 && y < 0)
+					return ;
+			mlx_put_pixel(win->img, x, y, color);
+			y++;
 		}
-		i++;
+		x++;
 	}
 }
 
@@ -38,10 +40,9 @@ void	draw_background(t_window *win, int floor, int ceiling)
 	t_point	end;
 
 	start = assign_int_point(0, 0);
-	printf("len=%d, wide=%d\n",win->map->len, win->map->wide);
-	end = assign_int_point(win->map->wide * 25 + 10, win->map->len * 50 + 21);
-	cub_drawer(win->img, start, end, floor);
-	start = assign_int_point(0, win->map->wide * 25 + 9);
-	end = assign_int_point(win->map->wide * 25 + 11, win->map->len * 50 + 21);
-	cub_drawer(win->img, start, end, ceiling);
+	end = assign_int_point(win->screen->x, win->screen->y / 2);
+	cub_drawer(win, start, end, floor);
+	start = assign_int_point(0, win->screen->y / 2 - 1);
+	end = assign_int_point(win->screen->x, win->screen->y);
+	cub_drawer(win, start, end, ceiling);
 }

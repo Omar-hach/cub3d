@@ -36,7 +36,7 @@ SRC = 	parsing/cub3d.c\
 		draw/put_textures.c\
 		draw/raycasting.c
 
-SRC_bonus = bonus/cub3D_bonus.c\
+SRC_bonus = bonus/cub3d_bonus.c\
 			draw/ft_drawer.c\
 			draw/map_draw.c\
 			draw/init_tools.c\

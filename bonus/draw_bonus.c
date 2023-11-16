@@ -31,8 +31,10 @@ void	draw_line(t_window *win, t_point start, t_point end)
 	i = -1;
 	while (++i < step)
 	{
-		if (pk.x > 0 && pk.y > 0)
-			mlx_put_pixel(win->img, pk.x, pk.y, 0xFF322BFF);
+		if(pk.x > win->screen->x && pk.y > win->screen->y
+				&& pk.x < 0 && pk.y < 0)
+					return ;
+		mlx_put_pixel(win->img, pk.x, pk.y, 0xFF322BFF);
 		pk.x += dp.x / step;
 		pk.y += dp.y / step;
 	}
@@ -50,8 +52,9 @@ void	player_drawer(t_window *win, t_point pos, int color)
 		deg = 0;
 		while (deg < M_PI * 2)
 		{
-			if(pos.y > 0 && pos.x > 0)
-				mlx_put_pixel(win->img, pos.x + r * cos(deg),
+			if(pos.y < 0 && pos.x < 0 && pos.x > win->screen->x && pos.y > win->screen->y)
+				return ;
+			mlx_put_pixel(win->img, pos.x + r * cos(deg),
 					pos.y + r * sin(deg), color);
 			deg += M_PI / 180;
 		}
