@@ -22,7 +22,8 @@ CFLAGS = -Werror -Wall -Wextra
 
 GLFW = $(shell brew --prefix glfw)
 
-FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" -g -fsanitize=address
+FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw -L"$(GLFW)/lib" 
+#-g -fsanitize=address
 
 SRC = 	parsing/cub3d.c\
 		parsing/get_element.c\
@@ -31,7 +32,6 @@ SRC = 	parsing/cub3d.c\
 		draw/ft_drawer.c\
 		draw/map_draw.c\
 		draw/init_tools.c\
-		parsing/check_map.c\
 		draw/assets_draw.c\
 		draw/put_textures.c\
 		draw/raycasting.c
@@ -40,10 +40,14 @@ SRC_bonus = bonus/cub3d_bonus.c\
 			draw/ft_drawer.c\
 			draw/map_draw.c\
 			draw/init_tools.c\
-			parsing/check_map.c\
 			draw/assets_draw.c\
+			draw/raycasting.c\
 			draw/put_textures.c\
-			draw/raycasting.c
+			parsing/get_element.c\
+			parsing/get_map.c\
+			parsing/read_file.c\
+			bonus/draw_bonus.c
+
 
 # parsing/check_textures.c
 OBJ = $(SRC:.c=.o)

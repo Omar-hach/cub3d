@@ -79,21 +79,21 @@ typedef struct s_ray
 
 typedef struct s_map
 {
-    char *split_line;
-    char *map_line;
-    char **full_file;
-    t_player *player;
-    char **mapo;
-    char *so;
-    char *we;
-    char *ea;
-    char *no;
-    char *c;
-    char *f;
-	int wide;
-	int len;
-    int error_find;
-    int map_start;
+	char		*split_line;
+	char		*map_line;
+	char		**full_file;
+	t_player	*player;
+	char		**mapo;
+	char		*so;
+	char		*we;
+	char		*ea;
+	char		*no;
+	char		*c;
+	char		*f;
+	int			wide;
+	int			len;
+	int			error_find;
+	int			map_start;
 } t_map;
 
 
@@ -111,7 +111,6 @@ typedef struct s_window
 
 void		ft_start_map(char *map);
 void		draw_line(t_window *win, t_point start, t_point end);
-void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
 void		player_drawer(t_window *win, t_point pos, int color);
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos,
 				t_vector v);
@@ -126,7 +125,7 @@ int			check_inside(t_window *win, t_point player);
 t_segm		wall(t_cord cord, t_window *win, t_cord step, int is_it_x);
 t_vector	rotation_vect(t_vector vect, double deg);
 void		draw_line(t_window *win, t_point start, t_point end);
-void		cub_drawer(mlx_image_t *img, t_point start, t_point end, int color);
+void		cub_drawer(t_window *win, t_point start, t_point end, int color);
 
 void		texturess(t_window *win, t_ray r, t_cord cord);
 t_point		mov_player(t_point player, t_vector v, mlx_t *mlxp);
@@ -153,12 +152,17 @@ void		free_all(t_window *win, char **elem);
 //parse
 
 t_player	*get_player_location(t_player *player, t_map *g, int *a);
-int        check_borders_col(t_map *g);
-int        check_borders_line(t_map *g);
-int 		get_text(t_map *g);
-int 		play_char(char c, int *a);
-int 		check_map_line(char **str);
-void 		ft_start(t_map *g);
+int			check_borders_col(t_map *g);
+int			check_borders_line(t_map *g);
+int			get_text(t_map *g);
+int			play_char(char c, int *a);
+int			check_map_line(char **str);
+void		ft_start_b(t_map *g);
+int			get_color(char *color, int r, int g, int b);
+char**		convert_map(char *line);
+int			get_map(int fd, t_map *g);
+int			get_data(int fd, t_map *g);
+void		get_len_wide(t_map *g);
 
 #endif
 

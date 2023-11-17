@@ -12,6 +12,55 @@
 
 #include "../cub3d.h"
 
+/*void	player_drawer(t_window *win, t_point pos, int color)
+{
+	int		r;
+	double	deg;
+
+	r = -1;
+	deg = 0;
+	while (++r < 2)
+	{
+		deg = 0;
+		while (deg < M_PI * 2)
+		{
+			if(pos.y < 0 && pos.x < 0 && pos.x > win->screen->x && pos.y > win->screen->y)
+				return ;
+			mlx_put_pixel(win->img, pos.x + r * cos(deg),
+					pos.y + r * sin(deg), color);
+			deg += M_PI / 180;
+		}
+	}
+}
+
+void	draw_mini_map(t_window *win, char **matrix)
+{
+	t_cord	cord;
+	t_point	start;
+	t_point	end;
+	int k;
+
+	cord = assign_cord(-1,0);
+	start = assign_int_point(0, 0);
+	end = assign_int_point(win->map->len * 10 + 4, win->map->wide * 10 + 4);
+	cub_drawer(win, start, end, 0x909090FF);
+	while (++cord.x < win->map->wide)
+	{
+		cord.y = -1;
+		while (++cord.y < ft_strlen(matrix[cord.x]))
+		{
+			start = assign_int_point(cord.y * 10 + 2, cord.x * 10 + 2);
+			end = assign_int_point(cord.y * 10 + 12, cord.x * 10 + 12);
+			if (matrix[cord.x][cord.y] == '1')
+				cub_drawer(win, start, end, 0x09005EFF);
+			else if (matrix[cord.x][cord.y] == '0'
+			|| play_char(matrix[cord.x][cord.y], &k))
+				cub_drawer(win, start, end, 0xB8A649FF);
+		}
+	}
+	player_drawer(win, win->player->p, 0xFF322BFF);
+}*/
+
 t_vector	rotation_vect(t_vector vect, double deg)
 {
 	t_vector	new_vect;
@@ -85,15 +134,16 @@ void	keyhook(void *param)
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	next_pos = pos_adjast(win, mov_player(win->player->p,
 				win->player->v, win->mlx_ptr));
-	draw_background(win, ft_color(80, 80, 00), ft_color(0, 80, 80));
+	draw_background(win, win->t.floor, win->t.ceileng);
 	r = draw_scene(win, next_pos, r);
+	//draw_mini_map(win, win->map->mapo);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 }
 
 void	init_val(t_window *win)
 {
 
-	win->player->speed = 0.5;
+	win->player->speed = 0.6;
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
 	win->mlx_ptr = mlx_init(win->screen->x, win->screen->y,
 			"Super Duper Cool 3D Game!!!", false);
@@ -103,7 +153,7 @@ void	init_val(t_window *win)
 			win->screen->x, win->screen->y);
 	if (!win->img)
 		error();
-	//mlx_loop_hook(win->mlx_ptr, &keyhook, win);
-	//mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
-	//mlx_loop(win->mlx_ptr);
+	mlx_loop_hook(win->mlx_ptr, &keyhook, win);
+	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
+	mlx_loop(win->mlx_ptr);
 }

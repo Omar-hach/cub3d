@@ -44,7 +44,7 @@ int	check_borders_line(t_map *g)
 	{
 		if (g->mapo[i][0] != '1' && g->mapo[i][0] != ' ')
 		{
-			printf("error\n");
+			printf(".error\n");
 			return (1);
 		}
 	}
@@ -60,7 +60,7 @@ int	check_borders_col(t_map *g)
 	{
 		if (g->mapo[0][j] != '1' && g->mapo[0][j] != ' ')
 		{
-			printf("error \n");
+			printf("=error \n");
 			return (1);
 		}
 		j++;
@@ -71,7 +71,7 @@ int	check_borders_col(t_map *g)
 		if ((g->mapo[ft_size(g->mapo) - 1][j] != '1') &&
 			(g->mapo[ft_size(g->mapo) - 1][j] != ' '))
 		{
-			printf("error \n");
+			printf("|error \n");
 			return (1);
 		}
 		j++;
@@ -79,7 +79,7 @@ int	check_borders_col(t_map *g)
 	return (0);
 }
 
-int	stek_rte7(char **str, int i, int j, int *pp)
+int	check_surending(char **str, int i, int j, int *pp)
 {
 	if ((str[j][i] != '1' && str[j][i] != ' ' && str[j][i] != '\n'
 		&& str[j][i] != '0') && play_char(str[j][i], pp) == 0)
@@ -87,13 +87,16 @@ int	stek_rte7(char **str, int i, int j, int *pp)
 		printf("error[%d][%d]-\n", j, i);
 		return (1);
 	}
-	if (str[j][i] == '0' && ((int)ft_strlen(str[j + 1]) < (i + 1)
+	if ((str[j][i] == '0' || str[j][i] == 'N' || str[j][i] == 'W' 
+		|| str[j][i] == 'E' || str[j][i] == 'S')
+		&& ((int)ft_strlen(str[j + 1]) < (i + 1)
 		|| (int)ft_strlen(str[j - 1]) < (i + 1)))
 	{
 		printf("error[%d][%d]&\n", j, i);
 		return (1);
 	}
-	if (str[j][i] == '0' 
+	if ((str[j][i] == '0' || str[j][i] == 'N' || str[j][i] == 'W' 
+		|| str[j][i] == 'E' || str[j][i] == 'S')
 		&& (str[j][i + 1] == ' ' || str[j][i - 1] == ' '
 		|| str[j + 1][i] == ' ' || str[j - 1][i] == ' '))
 	{
@@ -116,13 +119,13 @@ int	check_map_line(char **str)
 		i = -1;
 		while (str[j][++i] != '\0')
 		{
-			if (stek_rte7(str, i, j, &pp))
+			if (check_surending(str, i, j, &pp))
 				return (1);
 		}
 	}
 	if (pp != 1)
 	{
-		printf("error: not exactly one player\n");
+		printf("Error: not exactly one player\n");
 		return (1);
 	}
 	return (0);

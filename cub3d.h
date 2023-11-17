@@ -78,6 +78,23 @@ typedef struct s_ray
 	char	side;
 }t_ray;
 
+typedef struct s_parse
+{
+	char		*split_line;
+	char		*map_line;
+	char		**full_file;
+	t_player	*player;
+	char		**mapo;
+	char		*so;
+	char		*we;
+	char		*ea;
+	char		*no;
+	char		*c;
+	char		*f;
+	int			error_find;
+	int			map_start;
+} t_parse;
+
 typedef struct s_map
 {
 	char		*split_line;
@@ -97,7 +114,6 @@ typedef struct s_map
 	int			map_start;
 } t_map;
 
-
 typedef struct s_window
 {
 	t_player	*player; // put player position and angle here
@@ -108,7 +124,6 @@ typedef struct s_window
 	t_cord		*screen; // those are fix
 }t_window;
 
-void		ft_start_map(char *map);
 void		draw_line(t_window *win, t_point start, t_point end);
 void		player_drawer(t_window *win, t_point pos, int color);
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos,
@@ -119,9 +134,8 @@ double		angle_adjast(double angle, char sign);
 void		init_val(t_window *win);
 t_vector	assign_vect(double vx, double vy, double angle);
 t_point		pos_adjast(t_window *win, t_point pos);
-
 int			check_inside(t_window *win, t_point player);
-t_segm	wall(t_cord cord, t_window *win, t_vector v, int is_it_x);
+t_segm		wall(t_cord cord, t_window *win, t_vector v, int is_it_x);
 t_ray		draw_scene(t_window *win, t_point next_pos, t_ray r);
 t_vector	rotation_vect(t_vector vect, double deg);
 void		draw_background(t_window *win, int floor, int ceiling);
@@ -130,21 +144,13 @@ void		cub_drawer(t_window *win, t_point start, t_point end, int color);
 
 void		texturess(t_window *win, t_ray r, t_cord cord);
 t_ray		raycast(t_window *win, int side, t_point pos, t_vector v);
-//t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
-int			ft_color(int r, int g, int b);
 double		norme_vect(t_vector vect);
 double		dot_vect(t_vector vect, t_vector vect2);
 t_cord		assign_cord(int x, int y);
 t_point		in_cube_pos(t_window *win, t_cord cord, t_vector v);
 
-int			check_first_line(char *str);
-void		check_zero_surrond(char **strs);
-void		check_tab(char **strs);
-void		check_map(char **strs);
-void		error(void);
+void		error(void); //imposter
 void		free_all(t_window *win, char **elem);
-
-
 
 
 //parse
@@ -156,6 +162,10 @@ int			get_text(t_map *g);
 int			play_char(char c, int *a);
 int			check_map_line(char **str);
 void		ft_start(t_map *g);
-int	get_color(char *color, int r, int g, int b);
+int			get_color(char *color, int r, int g, int b);
+char**		convert_map(char *line);
+int			get_map(int fd, t_map *g);
+int			get_data(int fd, t_map *g);
+void		get_len_wide(t_map *g);
 
 #endif

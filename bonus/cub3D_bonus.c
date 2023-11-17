@@ -45,69 +45,92 @@ void	init_val_b(t_window *win)
 			win->screen->x, win->screen->y);
 	if (!win->img)
 		error();
-	//mlx_cursor_hook(win->mlx_ptr, &mouse_b, win);
 	mlx_loop_hook(win->mlx_ptr, &keyhook_b, win);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
 	mlx_loop(win->mlx_ptr);
 }
 
-void	ft_start_b(int i, char **strs)
+void	ft_start_b(t_map *g)
 {
 	t_window	*win;
-	int			j;
 
 	win = (t_window *)ft_calloc(1, sizeof(t_window));
-	win->player = (t_player *)ft_calloc(1, sizeof(t_player));
 	win->screen = (t_cord *)ft_calloc(1, sizeof(t_cord));
-	win->map->mapo = (char **)ft_calloc(100000 + 1, sizeof(char *));
-	win->map->wide = 0;
-	win->map->len = 0;
-	j = 0;
-	i = 7;
-	while (strs[i][0] == '\n')
-		i++;
-	check_tab(strs);
-	while (strs[i])
+	win->screen->x = 1280;
+	win->screen->y = 720;
+	win->player = g->player;
+	win->map = g;
+	win->map->wide = g->wide;
+	win->map->len = g->len;
+	win->t.ea = mlx_load_png(g->ea);
+	win->t.so = mlx_load_png(g->so);
+	win->t.no = mlx_load_png(g->no);
+	win->t.we = mlx_load_png(g->we);
+	win->t.ceileng = get_color(g->c, 0, 0, 0);
+	win->t.floor = get_color(g->f, 0, 0, 0);
+	if (!win->t.ea || !win->t.so || !win->t.we || !win->t.no 
+		|| !win->t.ceileng || !win->t.floor)
 	{
-		if (ft_strlen(strs[i]) > win->map->len)
-			win->map->len = ft_strlen(strs[i]);
-		win->map->mapo[j] = ft_strdup(strs[i]);
-		j++;
-		i++;
+		free_all(win, win->map->mapo);
+		printf("error=\n");
+		exit(1);
 	}
-	i = 0;
-	while (win->map->mapo[i])
-		i++;
-	get_player_location(win->player, win->map->mapo);
-	check_map(win->map->mapo);
-	//check_zero_surrond(win.map.mapo);
-	win->map->len--;
-	win->map->wide = i;
+	printf("color floor = #%X ceileng = #%X\n", win->t.floor, win->t.ceileng);
+	free(g->ea);
+	free(g->so);
+	free(g->no);
+	free(g->we);
+	free(g->c);
+	free(g->f);
 	init_val_b(win);
-	free_all(win, strs);
+	free_all(win, win->map->mapo);
+}
+
+void	parser_b(t_map *g, int fd)
+{
+	int	error;
+	int	i;
+
+	error = 0;
+	g->player = ft_calloc(1, sizeof(t_player));
+	error += get_data(fd, g);
+	error += get_map(fd, g);
+	g->mapo = convert_map(g->map_line);
+	g->full_file = convert_map(g->split_line);
+	error += check_borders_line(g);
+	error += check_borders_col(g);
+	g->player = get_player_location(g->player, g, &i);
+	error += get_text(g);
+	error += check_map_line(g->mapo);
+	get_len_wide(g);
+	i = 0;
+	printf("no = >%s-\n", g->so);
+	printf("no = >%s-\n", g->no);
+	printf("no = >%s-\n", g->ea);
+	printf("no = >%s-\n", g->we);
+	printf("no = >%s-\n", g->c);
+	printf("no = >%s-\n", g->f);
+	printf("----------------\t\n");
+	while (g->mapo[i])
+		printf("%s\n", g->mapo[i++]);
+	if (!error)
+		ft_start_b(g);
 }
 
 int main(int ac, char **av)
 {
+	t_map	*g;
 	int		fd;
-	char	**strs;
-	int		i;
 
-	i = 0;
-	if (ac == 2)
+	fd = open(av[1], O_RDONLY);
+	if (ac == 2 && fd > -1)
 	{
-		strs = (char **)ft_calloc(100, sizeof(char *));
-		fd = open(av[1], O_RDWR);
-		while (1)
-		{
-			strs[i] = get_next_line(fd);
-			if (!strs[i])
-				break;
-			i++;
-		}
-		//i = check_textures(strs, &t, &floor, &ceiling);
-		ft_start_b(i, strs);
+		g = ft_calloc(1, sizeof(t_map));
+		parser_b(g, fd);
 	}
 	else
-		return (1);
+	{
+		ft_putstr_fd("no map", 2);
+		return(1);
+	}
 }

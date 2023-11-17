@@ -12,7 +12,6 @@
 
 #include "cub3d_bonus.h"
 
-
 void	draw_line(t_window *win, t_point start, t_point end)
 {
 	t_point	dp;
@@ -31,9 +30,9 @@ void	draw_line(t_window *win, t_point start, t_point end)
 	i = -1;
 	while (++i < step)
 	{
-		if(pk.x > win->screen->x && pk.y > win->screen->y
-				&& pk.x < 0 && pk.y < 0)
-					return ;
+		if (pk.x > win->screen->x && pk.y > win->screen->y
+			&& pk.x < 0 && pk.y < 0)
+			return ;
 		mlx_put_pixel(win->img, pk.x, pk.y, 0xFF322BFF);
 		pk.x += dp.x / step;
 		pk.y += dp.y / step;
@@ -52,10 +51,11 @@ void	player_drawer(t_window *win, t_point pos, int color)
 		deg = 0;
 		while (deg < M_PI * 2)
 		{
-			if(pos.y < 0 && pos.x < 0 && pos.x > win->screen->x && pos.y > win->screen->y)
+			if (pos.y < 0 && pos.x < 0
+				&& pos.x > win->screen->x && pos.y > win->screen->y)
 				return ;
 			mlx_put_pixel(win->img, pos.x + r * cos(deg),
-					pos.y + r * sin(deg), color);
+				pos.y + r * sin(deg), color);
 			deg += M_PI / 180;
 		}
 	}
@@ -63,28 +63,27 @@ void	player_drawer(t_window *win, t_point pos, int color)
 
 void	draw_mini_map(t_window *win, char **matrix)
 {
-	int		x;
-	int		y;
+	t_cord	cord;
 	t_point	start;
 	t_point	end;
+	int		k;
 
-	x = -1;
-	y = -1;
+	cord = assign_cord(-1, 0);
 	start = assign_int_point(0, 0);
-	end = assign_int_point(win->map->wide * 10 + 4, win->map->len * 10 + 4);
-	cub_drawer(win->img, start, end, 0x909090FF);
-	end = assign_int_point(10, 10);
-	while (++x < win->map->wide)
+	end = assign_int_point(win->map->len * 10 + 4, win->map->wide * 10 + 4);
+	cub_drawer(win, start, end, 0x909090FF);
+	while (++cord.x < win->map->wide)
 	{
-		y = -1;
-		while (++y < win->map->len && matrix[x][y])
+		cord.y = -1;
+		while (++cord.y < win->map->len)
 		{
-			start = assign_int_point(y * 10 + 2, x * 10 + 2);
-			if (matrix[x][y] == '1')
-				cub_drawer(win->img, start, end, 0x09005EFF);
-			else if (matrix[x][y] != '1'
-			&& matrix[x][y] != ' ' && matrix[x][y] != '\n')
-				cub_drawer(win->img, start, end, 0xB8A649FF);
+			start = assign_int_point(cord.y * 10 + 2, cord.x * 10 + 2);
+			end = assign_int_point(cord.y * 10 + 12, cord.x * 10 + 12);
+			if (matrix[cord.x][cord.y] == '1')
+				cub_drawer(win, start, end, 0x09005EFF);
+			else if (matrix[cord.x][cord.y] == '0'
+			|| play_char(matrix[cord.x][cord.y], &k))
+				cub_drawer(win, start, end, 0xB8A649FF);
 		}
 	}
 	player_drawer(win, win->player->p, 0xFF322BFF);
@@ -149,9 +148,9 @@ void	keyhook_b(void *param)
 	mlx_delete_image(win->mlx_ptr, win->img);
 	win->img = mlx_new_image(win->mlx_ptr,
 			win->screen->x, win->screen->y);
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_RIGHT))// || mlx_is_mouse_down(win->mlx_ptr, MLX_MOUSE_BUTTON_RIGHT))
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_RIGHT))
 		win->player->angle = angle_adjast(win->player->angle, '+');
-	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))// || mlx_is_mouse_down(win->mlx_ptr, MLX_MOUSE_BUTTON_LEFT))
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
 		win->player->angle = angle_adjast(win->player->angle, '-');
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
 	{

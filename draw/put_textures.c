@@ -12,10 +12,6 @@
 
 #include "../cub3d.h"
 
-int	ft_color(int r, int g, int b)
-{
-	return (((r << 24) | (g << 16) | (b << 8) | 0xff));
-}
 
 void	texture_to_img(t_window *win, t_point mesure, mlx_texture_t *txt,
 	t_cord cord)

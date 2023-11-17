@@ -87,20 +87,24 @@ int	get_text(t_map *g)
 	i = 0;
 	while (g->full_file[i] != NULL)
 	{
-		if (compare_txt(g->full_file[i], "NO", 2) && !g->no)
+		if (compare_txt(g->full_file[i], "NO ", 3) && !g->no)
 			cut_txt(g->full_file[i], g, 4);
-		else if (compare_txt(g->full_file[i], "SO", 2) && !g->so)
+		else if (compare_txt(g->full_file[i], "SO ", 3) && !g->so)
 			cut_txt(g->full_file[i], g, 1);
-		else if (compare_txt(g->full_file[i], "WE", 2) && !g->we)
+		else if (compare_txt(g->full_file[i], "WE ", 3) && !g->we)
 			cut_txt(g->full_file[i], g, 2);
-		else if (compare_txt(g->full_file[i], "EA", 2) && !g->ea)
+		else if (compare_txt(g->full_file[i], "EA ", 3) && !g->ea)
 			cut_txt(g->full_file[i], g, 3);
-		else if (compare_txt(g->full_file[i], "C", 1) && !g->c)
+		else if (compare_txt(g->full_file[i], "C ", 2) && !g->c)
 			cut_txt(g->full_file[i], g, 5);
-		else if (compare_txt(g->full_file[i], "F", 1) && !g->f)
+		else if (compare_txt(g->full_file[i], "F ", 2) && !g->f)
 			cut_txt(g->full_file[i], g, 6);
 		i++;
 	}
+	if (!g->we || !g->so || !g->no || !g->ea)
+		return (printf("Error texture not found, Exiting...\n"));
+	if (!g->f || !g->c)
+		return (printf("Error color not found, Exiting...\n"));
 	return (0);
 }
 
@@ -112,8 +116,8 @@ int	prime_clore(char *color, char *num, int *i)
 	j = -1;
 	while (color[*i] == ' ')
 		(*i)++;
-	if (ft_isdigit(color[*i]))
-		return (-1);
+	if (!ft_isdigit(color[*i]))
+		return (-2);
 	while (color[*i] == '0')
 		(*i)++;
 	while (ft_isdigit(color[*i]) && ++j > -2)
@@ -121,9 +125,9 @@ int	prime_clore(char *color, char *num, int *i)
 	if (color[*i] == ',' || !color[*i])
 		(*i)++;
 	else
-		return (-1);
+		return (-3);
 	prime = ft_atoi(num);
-	if (ft_strlen(num) > 3 || prime < 0 || prime > 255)
+	if (ft_strlen(num) > 3 || prime < 0 || prime > 256)
 		return (-1);
 	ft_bzero(num, ft_strlen(num));
 	return (prime);
@@ -135,6 +139,8 @@ int	get_color(char *color, int r, int g, int b)
 	char	*num;
 
 	i = -1;
+	if (!color)
+		return (0);
 	while (color[++i])
 	{
 		if (color[i] == ',')
@@ -147,7 +153,6 @@ int	get_color(char *color, int r, int g, int b)
 		r = prime_clore(color, num, &i);
 		g = prime_clore(color, num, &i);
 		b = prime_clore(color, num, &i);
-		//printf("Error : check the rgb please\n", r,g,b);
 		free(num);
 		if (r > -1 && g > -1 && b > -1)
 			return (((r << 24) | (g << 16) | (b << 8) | 0xff));
@@ -155,3 +160,5 @@ int	get_color(char *color, int r, int g, int b)
 	printf("Error : check the rgb please\n");
 	return (0);
 }
+
+//printf("color %d, %d, %d\n", r,g,b);
