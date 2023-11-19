@@ -1,41 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d_bonus.c                                      :+:      :+:    :+:   */
+/*   start_game.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohachami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 10:34:37 by ohachami          #+#    #+#             */
-/*   Updated: 2023/11/13 10:34:39 by ohachami         ###   ########.fr       */
+/*   Created: 2023/11/17 19:39:16 by mdouzi            #+#    #+#             */
+/*   Updated: 2023/11/18 00:13:41 by mdouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "../cub3d.h"
 
-void	init_val_b(t_window *win)
+void	free_start(t_map *g)
 {
-	win->player->speed = 0.6;
-	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
-	win->mlx_ptr = mlx_init(win->screen->x, win->screen->y,
-			"Super Duper Cool 3D Game!!!", false);
-	if (!win->mlx_ptr)
-	{
-		free_all(win);
-		error();
-	}
-	win->img = mlx_new_image(win->mlx_ptr,
-			win->screen->x, win->screen->y);
-	if (!win->img)
-	{
-		free_all(win);
-		error();
-	}
-	mlx_loop_hook(win->mlx_ptr, &keyhook_b, win);
-	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);
-	mlx_loop(win->mlx_ptr);
+	if (g->ea)
+		free(g->ea);
+	if (g->so)
+		free(g->so);
+	if (g->no)
+		free(g->no);
+	if (g->we)
+		free(g->we);
+	if (g->c)
+		free(g->c);
+	if (g->f)
+		free(g->f);
 }
 
-void	ft_start_b(t_map *g)
+void	init_data(t_window *win, t_map *g)
+{
+	win->screen = (t_cord *)ft_calloc(1, sizeof(t_cord));
+	win->screen->x = 1280;
+	win->screen->y = 720;
+	win->player = g->player;
+	win->map = g;
+	win->t.ea = mlx_load_png(g->ea);
+	win->t.so = mlx_load_png(g->so);
+	win->t.no = mlx_load_png(g->no);
+	win->t.we = mlx_load_png(g->we);
+	win->t.ceileng = get_color(g->c, 0, 0, 0);
+	win->t.floor = get_color(g->f, 0, 0, 0);
+}
+
+void	ft_start(t_map *g)
 {
 	t_window	*win;
 	int			j;
@@ -54,11 +62,11 @@ void	ft_start_b(t_map *g)
 		free_all(win);
 		exit(1);
 	}
-	init_val_b(win);
+	init_val(win);
 	free_all(win);
 }
 
-void	parser2_b(t_map *g)
+void	parser2(t_map *g)
 {
 	int	i;
 
@@ -73,14 +81,11 @@ void	parser2_b(t_map *g)
 	if (get_text(g))
 		free_txt(g, "error need more info\n");
 	g->player = get_player_location(g->player, g, &i);
-	ft_start_b(g);
+	ft_start(g);
 }
 
-void	parser_b(t_map *g, int fd)
+void	parser(t_map *g, int fd)
 {
-	int	i;
-
-	i = 0;
 	g->player = ft_calloc(1, sizeof(t_player));
 	if (get_data(fd, g) > 0)
 	{
@@ -101,21 +106,5 @@ void	parser_b(t_map *g, int fd)
 	g->full_file = convert_map(g->split_line);
 	free(g->split_line);
 	free(g->map_line);
-	parser2_b(g);
-}
-
-int	main(int ac, char **av)
-{
-	t_map	*g;
-	int		fd;
-
-	check_lines(av[1]);
-	fd = open(av[1], O_RDONLY);
-	if (ac == 2 && fd > -1)
-	{
-		g = ft_calloc(1, sizeof(t_map));
-		parser_b(g, fd);
-	}
-	else
-		ft_exit("Error need more information, Exiting...");
+	parser2(g);
 }

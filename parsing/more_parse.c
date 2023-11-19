@@ -1,29 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   more_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 02:12:43 by ohachami          #+#    #+#             */
-/*   Updated: 2023/11/17 22:11:48 by mdouzi           ###   ########.fr       */
+/*   Created: 2023/11/17 22:07:54 by mdouzi            #+#    #+#             */
+/*   Updated: 2023/11/17 22:33:09 by mdouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	main(int ac, char **av)
+char	**convert_map(char *line)
 {
-	t_map	*g;
-	int		fd;
+	char	**str;
 
-	check_lines(av[1]);
-	fd = open(av[1], O_RDONLY);
-	if (ac == 2 && fd > -1)
+	str = ft_split(line, '\n');
+	return (str);
+}
+
+int	play_char(char c, int *a)
+{
+	if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
 	{
-		g = ft_calloc(1, sizeof(t_map));
-		parser(g, fd);
+		(*a)++;
+		return (1);
 	}
 	else
-		ft_exit("Error need more information, Exiting...");
+		return (0);
+}
+
+void	get_len_wide(t_map *g)
+{
+	int	j;
+	int	i;
+
+	i = 0;
+	j = 0;
+	g->len = 0;
+	g->wide = 0;
+	while (g->mapo[j])
+	{
+		i = 0;
+		while (g->mapo[j][i])
+			i++;
+		if (i > g->len)
+			g->len = i;
+		j++;
+	}
+	g->wide = j;
 }

@@ -92,7 +92,7 @@ t_ray	raycast(t_window *win, int side, t_point pos, t_vector v)
 	cubepos = in_cube_pos(win, cord, v);
 	unite = assign_point(fabs(cubepos.x / v.x), fabs(cubepos.y / v.y));
 	while (cord.y < win->map->wide && cord.y >= 0 && cord.x < win->map->len
-		&& cord.x >= 0 && win->map->mapo[cord.y][cord.x] != '1')///win->map->wide * 10
+		&& cord.x >= 0 && win->map->mapo[cord.y][cord.x] != '1')
 	{
 		if (unite.x < unite.y || (v.y < 0.00001 && v.y > -0.00001))
 		{

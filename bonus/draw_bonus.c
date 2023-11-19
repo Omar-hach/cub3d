@@ -89,29 +89,6 @@ void	draw_mini_map(t_window *win, char **matrix)
 	player_drawer(win, win->player->p, 0xFF322BFF);
 }
 
-int	check_inside_b(t_window *win, t_point player)
-{
-	int	i;
-	int	j;
-
-	i = (player.y + 1) / 10;
-	j = (player.x + 1) / 10;
-	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
-			|| !win->map->mapo[i][j])
-		return (0);
-	i = (player.y - 5) / 10;
-	j = (player.x - 5) / 10;
-	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
-			|| !win->map->mapo[i][j])
-		return (0);
-	i = (player.y - 2) / 10;
-	j = (player.x - 2) / 10;
-	if (win->map->mapo[i][j] == '1' || win->map->mapo[i][j] == ' '
-			|| !win->map->mapo[i][j])
-		return (0);
-	return (1);
-}
-
 t_ray	draw_scene_b(t_window *win, t_point next_pos)
 {
 	double		plane;
@@ -130,11 +107,11 @@ t_ray	draw_scene_b(t_window *win, t_point next_pos)
 		plane = (2 * (double)pixel.x / 40 - 32) * M_PI / (double)180;
 		plane_v = assign_vect(win->player->speed, 0,
 				win->player->angle + plane);
-		r = raycast(win, 1, plane_v, cord);
+		r = raycast(win, 1, win->player->p, plane_v);
 		pixel.y = (win->screen->y - win->screen->y / r.dist * 10) / 2 - 1;
 		texturess(win, r, pixel);
 	}
-	r = raycast(win, 0, win->player->v, cord);
+	r = raycast(win, 1, win->player->p, win->player->v);
 	return (r);
 }
 
@@ -153,15 +130,15 @@ void	keyhook_b(void *param)
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_LEFT))
 		win->player->angle = angle_adjast(win->player->angle, '-');
 	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
-	{
-		mlx_delete_image(win->mlx_ptr, win->img);
-		free_all(win, win->map->mapo);
+		free_all(win);
+	if (mlx_is_key_down(win->mlx_ptr, MLX_KEY_ESCAPE))
 		exit(0);
-	}
-	draw_background(win, ft_color(120, 0, 00), ft_color(0, 0, 120));
+	r.p = win->player->p;
 	win->player->v = assign_vect(win->player->speed, 0, win->player->angle);
-	next_pos = mov_player(win->player->p, win->player->v, win->mlx_ptr);
-	r = draw_scene_b(win, next_pos);
+	next_pos = pos_adjast(win, mov_player(win->player->p,
+				win->player->v, win->mlx_ptr));
+	draw_background(win, win->t.floor, win->t.ceileng);
+	r = draw_scene(win, next_pos, r);
 	draw_mini_map(win, win->map->mapo);
 	draw_line(win, win->player->p, r.p);
 	mlx_image_to_window(win->mlx_ptr, win->img, 0, 0);

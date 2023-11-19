@@ -12,7 +12,6 @@
 
 #include "../cub3d.h"
 
-
 void	texture_to_img(t_window *win, t_point mesure, mlx_texture_t *txt,
 	t_cord cord)
 {

@@ -30,52 +30,69 @@ typedef struct s_texture
 	mlx_texture_t	*ea;
 	int				floor;
 	int				ceileng;
-}t_texture;
+}				t_texture;
 
 typedef struct s_vector
 {
 	double	x;
 	double	y;
-}t_vector;
+}				t_vector;
 
 typedef struct s_point
 {
 	double	x;
 	double	y;
-}t_point;
+}				t_point;
 
 typedef struct s_cord
 {
 	int	x;
 	int	y;
-}t_cord;
+}				t_cord;
 
 typedef struct s_contact
 {
 	t_point	r;
-	double	dist;
-}t_contact;
+	double	distance;
+}				t_contact;
 
 typedef struct s_segm
 {
 	t_point	start;
 	t_point	end;
-}t_segm;
+}				t_segm;
 
 typedef struct s_player
 {
-	t_point		p; // put player position 
-	double		angle; // put angle here
+	t_point		p;
 	t_vector	v;
-	double		speed; // this is a fixed value
-}t_player;
+	double		angle;
+	double		speed;
+}				t_player;
 
 typedef struct s_ray
 {
 	t_point	p;
 	double	dist;
 	char	side;
-}t_ray;
+}				t_ray;
+
+typedef struct s_parse
+{
+	char		*split_line;
+	char		*map_line;
+	char		**full_file;
+	t_player	*player;
+	char		**mapo;
+	char		*so;
+	char		*we;
+	char		*ea;
+	char		*no;
+	char		*c;
+	char		*f;
+	int			error_find;
+	int			map_start;
+}				t_parse;
 
 typedef struct s_map
 {
@@ -94,22 +111,18 @@ typedef struct s_map
 	int			len;
 	int			error_find;
 	int			map_start;
-} t_map;
-
-
+}				t_map;
 
 typedef struct s_window
 {
-	void		*win_ptr;
-	t_player	*player; // put player position and angle here
+	t_player	*player;
 	mlx_image_t	*img;
 	mlx_t		*mlx_ptr;
 	t_map		*map;
-	t_texture	t; // put texture and floor && celein colore here
-	t_cord		*screen; // those are fix
-}t_window;
+	t_texture	t;
+	t_cord		*screen;
+}				t_window;
 
-void		ft_start_map(char *map);
 void		draw_line(t_window *win, t_point start, t_point end);
 void		player_drawer(t_window *win, t_point pos, int color);
 t_vector	ft_draw_map(t_window *win, char **matrix, t_point next_pos,
@@ -120,49 +133,47 @@ double		angle_adjast(double angle, char sign);
 void		init_val(t_window *win);
 t_vector	assign_vect(double vx, double vy, double angle);
 t_point		pos_adjast(t_window *win, t_point pos);
-
-int			check_inside(t_window *win, t_point player);
-t_segm		wall(t_cord cord, t_window *win, t_cord step, int is_it_x);
+int			check_inside_b(t_window *win, t_point player);
+t_segm		wall(t_cord cord, t_window *win, t_vector v, int is_it_x);
+t_ray		draw_scene(t_window *win, t_point next_pos, t_ray r);
 t_vector	rotation_vect(t_vector vect, double deg);
+void		draw_background(t_window *win, int floor, int ceiling);
 void		draw_line(t_window *win, t_point start, t_point end);
 void		cub_drawer(t_window *win, t_point start, t_point end, int color);
-
 void		texturess(t_window *win, t_ray r, t_cord cord);
-t_point		mov_player(t_point player, t_vector v, mlx_t *mlxp);
-void		draw_background(t_window *win, int floor, int ceiling);
+t_ray		raycast(t_window *win, int side, t_point pos, t_vector v);
 double		norme_vect(t_vector vect);
-int			ft_color(int r, int g, int b);
 double		dot_vect(t_vector vect, t_vector vect2);
 t_cord		assign_cord(int x, int y);
-t_ray		raycast(t_window *win, int side, t_vector v, t_cord cord);
 t_point		in_cube_pos(t_window *win, t_cord cord, t_vector v);
-
-void		draw_mini_map(t_window *win, char **matrix);
-int			check_inside_b(t_window *win, t_point player);
-t_ray		draw_scene_b(t_window *win, t_point next_pos);
-void		keyhook_b(void *param);
-
-int			check_first_line(char *str);
-void		check_zero_surrond(char **strs);
-void		check_tab(char **strs);
-void		check_map(char **strs);
 void		error(void);
-void		free_all(t_window *win, char **elem);
+void		free_all(t_window *win);
+void		keyhook_b(void *param);
+void		init_data(t_window *win, t_map *g);
+void		free_start(t_map *g);
+t_point		mov_player(t_point player, t_vector v, mlx_t *mlxp);
 
 //parse
-
+void		ft_exit(char *message);
+void		check_lines(char *file);
 t_player	*get_player_location(t_player *player, t_map *g, int *a);
-int			check_borders_col(t_map *g);
-int			check_borders_line(t_map *g);
+void		check_borders_col(t_map *g);
+void		check_borders_line(t_map *g);
 int			get_text(t_map *g);
 int			play_char(char c, int *a);
 int			check_map_line(char **str);
-void		ft_start_b(t_map *g);
-int			get_color(char *color, int r, int g, int b);
-char**		convert_map(char *line);
+void		ft_start(t_map *g);
+char		**convert_map(char *line);
 int			get_map(int fd, t_map *g);
 int			get_data(int fd, t_map *g);
 void		get_len_wide(t_map *g);
+void		exit_all(t_map *g, char *str);
+void		free_txt(t_map *g, char *str);
+void		exit_map_error(t_map *g, char *str);
+void		exit_from_start(t_window *win);
+void		parser(t_map *g, int fd);
+void		get_last_n_line(char *line, char **kep);
+int			get_color(char *color, int r, int g, int b);
+int			play_char(char c, int *a);
 
 #endif
-

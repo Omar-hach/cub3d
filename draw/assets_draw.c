@@ -24,9 +24,9 @@ void	cub_drawer(t_window *win, t_point start, t_point end, int color)
 		y = start.y;
 		while (y < end.y)
 		{
-			if(x > win->screen->x && y > win->screen->y
+			if (x > win->screen->x && y > win->screen->y
 				&& x < 0 && y < 0)
-					return ;
+				return ;
 			mlx_put_pixel(win->img, x, y, color);
 			y++;
 		}

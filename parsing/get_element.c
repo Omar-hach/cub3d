@@ -6,7 +6,7 @@
 /*   By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 03:51:50 by mdouzi            #+#    #+#             */
-/*   Updated: 2023/11/15 06:31:32 by mdouzi           ###   ########.fr       */
+/*   Updated: 2023/11/17 23:08:51 by mdouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,63 +102,8 @@ int	get_text(t_map *g)
 		i++;
 	}
 	if (!g->we || !g->so || !g->no || !g->ea)
-		return (printf("Error texture not found, Exiting...\n"));
+		return (1);
 	if (!g->f || !g->c)
-		return (printf("Error color not found, Exiting...\n"));
+		return (1);
 	return (0);
 }
-
-int	prime_clore(char *color, char *num, int *i)
-{
-	int	j;
-	int	prime;
-
-	j = -1;
-	while (color[*i] == ' ')
-		(*i)++;
-	if (!ft_isdigit(color[*i]))
-		return (-2);
-	while (color[*i] == '0')
-		(*i)++;
-	while (ft_isdigit(color[*i]) && ++j > -2)
-		num[j] = color[(*i)++];
-	if (color[*i] == ',' || !color[*i])
-		(*i)++;
-	else
-		return (-3);
-	prime = ft_atoi(num);
-	if (ft_strlen(num) > 3 || prime < 0 || prime > 256)
-		return (-1);
-	ft_bzero(num, ft_strlen(num));
-	return (prime);
-}
-
-int	get_color(char *color, int r, int g, int b)
-{
-	int		i;
-	char	*num;
-
-	i = -1;
-	if (!color)
-		return (0);
-	while (color[++i])
-	{
-		if (color[i] == ',')
-			r++;
-	}
-	if (r == 2)
-	{
-		i = 0;
-		num = (char *)ft_calloc(1, sizeof(char));
-		r = prime_clore(color, num, &i);
-		g = prime_clore(color, num, &i);
-		b = prime_clore(color, num, &i);
-		free(num);
-		if (r > -1 && g > -1 && b > -1)
-			return (((r << 24) | (g << 16) | (b << 8) | 0xff));
-	}
-	printf("Error : check the rgb please\n");
-	return (0);
-}
-
-//printf("color %d, %d, %d\n", r,g,b);
