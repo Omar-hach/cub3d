@@ -6,7 +6,7 @@
 /*   By: mdouzi < mdouzi@student.1337.ma>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 03:39:59 by mdouzi            #+#    #+#             */
-/*   Updated: 2023/11/15 11:50:52 by mdouzi           ###   ########.fr       */
+/*   Updated: 2023/11/16 03:49:23 by mdouzi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int not_map(char c)
 }
 
 void get_last_n_line(char *line, char **kep) {
-    *kep = ft_strjoin(*kep, line);
-    *kep = ft_strjoin(*kep, "\n");
+    *kep = ft_strjoin2(*kep, line);
+    *kep = ft_strjoin2(*kep, "\n");
 }
 
 int get_data(int fd, t_map *g) {
@@ -84,6 +84,7 @@ int get_map(int fd, t_map *g)
             line = NULL;
         }
     }
+    free(line);
     return 1;
 }
 
